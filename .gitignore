@@ -1,0 +1,6 @@
+/_build
+/deps
+/models
+Mnesia.*
+*.csv
+.elixir_ls
