@@ -44,23 +44,29 @@ def setup do
 
   # --- CLUSTERING ( The Magic ) ---
 
+# --- CLUSTERING (The Healer) ---
+
   def add_node_to_cluster(target_node) do
-    # This function runs when Discovery finds a new friend.
-    # It copies our database to them.
+    Logger.info("🧠 Swarm Link: Syncing memory with #{target_node}...")
 
-    Logger.info("🧠 Syncing Memory with #{target_node}...")
-
-    # 1. Connect Mnesia Config
+    # 1. Connect Mnesia networking
     :mnesia.change_config(:extra_db_nodes, [target_node])
 
-    # 2. Tell the other node to store a copy on RAM (or Disk)
-    # We use RPC to tell the *remote* node to add a table copy.
-    rpc_result = :rpc.call(target_node, :mnesia, :add_table_copy, [@table, target_node, :disc_copies])
+    # 2. CONVERGENCE: Ensure BOTH nodes have the table.
+    # It doesn't matter who has it first; Mnesia will handle the copy.
 
-    case rpc_result do
-      {:atomic, :ok} -> Logger.info("✅ Memory Replicated to #{target_node}")
-      {:aborted, {:already_exists, _}} -> Logger.debug("✅ Memory already exists on #{target_node}")
-      other -> Logger.warning("⚠️ Memory Sync Warning: #{inspect(other)}")
+    # A. Ask Remote Node to store a copy (Push)
+    case :rpc.call(target_node, :mnesia, :add_table_copy, [@table, target_node, :disc_copies]) do
+      {:atomic, :ok} -> Logger.info("✅ Remote: Memory replicated to #{target_node}")
+      {:aborted, {:already_exists, _}} -> :ok # Silent success
+      other -> Logger.warning("⚠️ Remote Sync: #{inspect(other)}")
+    end
+
+    # B. Ask Local Node to store a copy (Pull)
+    case :mnesia.add_table_copy(@table, Node.self(), :disc_copies) do
+      {:atomic, :ok} -> Logger.info("✅ Local: Memory replicated from Swarm")
+      {:aborted, {:already_exists, _}} -> :ok # Silent success
+      other -> Logger.warning("⚠️ Local Sync: #{inspect(other)}")
     end
   end
 
