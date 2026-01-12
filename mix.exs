@@ -29,6 +29,7 @@ defmodule SwarmBrain.MixProject do
       {:bumblebee, "~> 0.6.0"},    # Pre-trained models (YOLOv8, ResNet, etc.)
       {:axon, "~> 0.7.0"},         # Neural Network framework
       {:nx, "~> 0.9.0"},           # Numerical Elixir (Tensors)
+      {:circuits_uart, "~> 1.5"},
 
       # --- 🚀 Acceleration (The Engine) ---
       # EXLA is the compiler that makes Elixir fast for Math.

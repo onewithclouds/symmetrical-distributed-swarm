@@ -1,12 +1,25 @@
 defmodule SwarmBrain.Pipeline do
   @moduledoc """
   The Main Circuit Board.
-  It connects the Eye (Input) to the Cortex (Processing) using Process Groups.
+  Connects Inputs -> Cortex -> Persistence.
+  Now features "Dual-Mode Switching" (WiFi vs Radio).
   """
   require Logger
-  alias SwarmBrain.{Eye, Location, Cortex, Observation, Persistence}
+  alias SwarmBrain.{Eye, Location, Observation, Persistence, Radio}
 
-  # ... (run_scout_sequence and run_local_sequence remain the same) ...
+  @cortex Application.compile_env(:swarm_brain, :cortex_module)
+
+  # --- PUBLIC API ---
+
+  def run_local_sequence do
+    Eye.capture()
+    |> Location.stamp()
+    |> process_signal()
+  end
+
+  def ingest_remote_signal(observation) do
+    process_signal(observation)
+  end
 
   def run_scout_sequence do
     Eye.capture()
@@ -14,43 +27,49 @@ defmodule SwarmBrain.Pipeline do
     |> broadcast_to_brain()
   end
 
-  def run_local_sequence do
-    Eye.capture()
-    |> Location.stamp()
-    |> Cortex.analyze()
+  # --- INTERNAL CIRCUIT ---
+
+  # 1. DOUBLE-THINK FIX: Skip analysis if predictions exist
+  defp process_signal(%Observation{predictions: [_|_]} = obs) do
+    persist_memory(obs)
+  end
+
+  # 2. FRESH DATA: Analyze it
+  defp process_signal(obs) do
+    obs
+    |> @cortex.analyze()
     |> persist_memory()
   end
 
-  # ... (broadcast_to_brain remains the same) ...
-  defp broadcast_to_brain(%Observation{} = obs) do
-    # "pg" is Erlang's Process Group. We ask: "Who is in the 'brains' group?"
-    brains = :pg.get_members(:brains)
-
-    case brains do
-      [] ->
-        Logger.warning("📡 No Brains detected in range! Dropping packet.")
-        {:error, :no_brain}
-
-      [target | _] ->
-        Logger.info("📡 Beaming signal to brain: #{inspect(target)}")
-        send(target, {:remote_process, obs})
-        {:ok, :sent}
-    end
-  end
-
-  # --- 4. PERSISTENCE (UPDATED) ---
-
-  def persist_memory(%Observation{predictions: [top|_]} = obs) do
-    # 1. Write to Mnesia (Disk)
+  def persist_memory(obs) do
     Persistence.save(obs)
-
-    Logger.info("💾 Memory Persisted: #{top.label} (ID: #{obs.id})")
-
-    # 2. Notify the Watchman (Visual/CSV logging)
     send(SwarmBrain.Watchman, {:observation_stored, obs})
     obs
   end
 
-  # Handle case where no predictions exist
-  def persist_memory(obs), do: obs
+  # --- THE DUAL-MODE SWITCH ---
+  defp broadcast_to_brain(%Observation{} = obs) do
+    # Check for High-Bandwidth Peers (WiFi)
+    # Node.list() returns connected Erlang nodes.
+    case Node.list() do
+      [] ->
+        # 🌑 WILDERNESS MODE (No WiFi)
+        # Send a compressed telegram via EMAX 2W
+        Logger.info("🌑 No WiFi peers. Switching to RADIO TELEGRAM.")
+        Radio.broadcast(obs)
+
+        # We also process locally since we couldn't offload it
+        process_signal(obs)
+
+      peers ->
+        # ☀️ CIVILIAN MODE (WiFi Present)
+        # Send the full struct with image via TCP
+        target = Enum.random(peers)
+        Logger.info("☀️ WiFi peers found. Offloading task to #{inspect(target)}.")
+
+        # Prune heavy image if needed (optional optimization)
+        payload = Observation.prune_payload(obs)
+        send({SwarmBrain.Antenna, target}, {:remote_process, payload})
+    end
+  end
 end

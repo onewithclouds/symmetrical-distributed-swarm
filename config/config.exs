@@ -1,5 +1,8 @@
 import Config
 
+# We plug the ResNet module into the Cortex socket
+config :swarm_brain, :cortex_module, SwarmBrain.Cortex.ResNet
+
 # 1. Set the Default Backend to EXLA (XLA)
 # This forces Nx to use the compiled C++ backend (CPU or GPU)
 config :nx, :default_backend, EXLA.Backend

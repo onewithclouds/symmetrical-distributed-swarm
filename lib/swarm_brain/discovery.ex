@@ -1,9 +1,13 @@
 defmodule SwarmBrain.Discovery do
+  @moduledoc """
+  The Civilian Link.
+  Manages WiFi/Erlang Distribution connections.
+  If this fails, the Pipeline automatically falls back to Radio.
+  """
   use GenServer
   require Logger
   alias SwarmBrain.Persistence
 
-  # ⏱️ Heartbeat Interval
   @interval 5_000
 
   def start_link(opts) do
@@ -19,37 +23,25 @@ defmodule SwarmBrain.Discovery do
   @impl true
   def handle_info(:connect, state) do
     Enum.each(state.nodes, fn node_name ->
-      connect_to_node(node_name)
+      if node_name != Node.self() do
+        Node.connect(node_name)
+      end
     end)
 
-    # Optional: Don't log status every 5s if it's spammy,
-    # but for Class A monitoring, it's nice.
-    # log_cluster_status()
+    # Check who is actually alive for logging
+    connected = Node.list()
+    if connected != [] do
+      Logger.debug("🌐 WiFi Mesh Active: #{inspect(connected)}")
+      # Sync databases if we have a connection
+      Enum.each(connected, &Persistence.add_node_to_cluster/1)
+    end
 
     Process.send_after(self(), :connect, @interval)
     {:noreply, state}
   end
 
-  defp connect_to_node(node_name) do
-    if node_name != Node.self() do
-      case Node.connect(node_name) do
-        true ->
-          # ✨ NEW: When we connect, try to sync memory!
-          Persistence.add_node_to_cluster(node_name)
-          :ok
-        false ->
-          # Silent fail is fine, we'll try again in 5s
-          :ok
-        :ignored ->
-          :ok
-      end
-    end
-  end
-
   defp list_target_nodes do
-    # You can update this list or use a dynamic scan
+    # Symmetrical List of known IP addresses
     [:"brain@192.168.1.147", :"brain@192.168.1.243"]
   end
-
-  # defp log_cluster_status, do: :ok
 end
