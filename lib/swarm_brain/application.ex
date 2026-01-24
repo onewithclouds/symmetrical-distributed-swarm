@@ -1,49 +1,52 @@
 defmodule SwarmBrain.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
   use Application
-  require Logger
 
   @impl true
   def start(_type, _args) do
-    # 1. Initialize Mnesia Schema/Table ON DISK
-    SwarmBrain.Persistence.setup()
-
-    # 2. Join the "Airwaves" (WiFi Group)
-    :pg.start_link()
-
+    # Define the supervision tree
     children = [
+      # 1. The Nervous System (PubSub)
+      # Must start first so Radio and Formation can talk.
+      {Phoenix.PubSub, name: SwarmBrain.PubSub},
+
+      # 2. The Distributed Mind (Horde)
+      # These allow us to find processes across the cluster (Drone A finds Drone B).
+      {Horde.Registry, [name: SwarmBrain.HordeRegistry, keys: :unique]},
+      {Horde.DynamicSupervisor, [name: SwarmBrain.HordeSupervisor, strategy: :one_for_one]},
+
+      # Blackbox telemetry
+      SwarmBrain.Persistence,
+
+      # 3. The Discovery Service (Cluster Connectivity)
+      # Finds other nodes via UDP gossip or WiFi.
       SwarmBrain.Discovery,
 
-      # 📡 NEW: The Wilderness Link (UART/LoRa)
-      # We pass the serial port address (adjust "/dev/ttyS0" to your hardware)
-      {SwarmBrain.Radio, [port: "/dev/ttyS0", speed: 420_000]},
-
-      # The Antenna listens for internal Erlang messages
+      # 4. The Hardware Interface (Radio)
+      # Starts listening to UART immediately.
       SwarmBrain.Antenna,
 
-      # The Vision Serving (The Neural Network Engine)
-      {Nx.Serving, serving: vision_serving(), name: SwarmBrain.VisionServing},
+      # 5. The Logic Core
+      # Pipeline: Decides what to do with images.
+      # Formation: Decides how to fly based on Radio packets.
+      SwarmBrain.Pipeline,
+      SwarmBrain.Formation,
 
-      SwarmBrain.Watchman
+      # 6. The Eye (Camera)
+      # Can be disabled via config for "Blind" nodes.
+      # SwarmBrain.Eye,
+
+      # 7. The Cortex (Brain)
+      # This might be a heavy process (NX/Axon), so we start it last.
+      {SwarmBrain.Cortex, name: SwarmBrain.Cortex}
     ]
 
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SwarmBrain.Supervisor]
     Supervisor.start_link(children, opts)
-  end
-
-  # --- VISION ENGINE SETUP ---
-  defp vision_serving do
-    local_path = Path.join([File.cwd!(), "models", "yolov8n"])
-
-    if File.exists?(local_path) do
-      Logger.info("🧠 Loading Local Model from: #{local_path}")
-      {:ok, model} = Bumblebee.load_model({:local, local_path})
-      {:ok, featurizer} = Bumblebee.load_featurizer({:local, local_path})
-      Bumblebee.Vision.image_classification(model, featurizer)
-    else
-      Logger.warning("⚠️ Local model missing. Downloading ResNet-50...")
-      {:ok, model} = Bumblebee.load_model({:hf, "microsoft/resnet-50"})
-      {:ok, featurizer} = Bumblebee.load_featurizer({:hf, "microsoft/resnet-50"})
-      Bumblebee.Vision.image_classification(model, featurizer)
-    end
   end
 end

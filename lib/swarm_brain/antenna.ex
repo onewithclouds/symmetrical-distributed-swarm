@@ -1,34 +1,41 @@
 defmodule SwarmBrain.Antenna do
   @moduledoc """
-  The Receiver.
-  It listens for incoming thoughts from other nodes and passes them to the Pipeline.
+  The Hardware Interface for RF Communication (LoRa/ELRS).
+  Formerly 'Radio'.
   """
   use GenServer
   require Logger
+  # alias Circuits.UART # Uncomment when running on real hardware
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  @topic "radio:telemetry"
+
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   @impl true
-  def init(state) do
-    # Join the "brains" group so we can hear the signals
-    :pg.join(:brains, self())
-    Logger.info("📡 Antenna is listening for remote signals...")
-    {:ok, state}
+  def init(_opts) do
+    Logger.info("📡 Antenna Listening on UART...")
+    # Mocking UART connection for development
+    # In production: UART.open(...)
+    {:ok, %{port: nil, rssi: -60}}
   end
 
-  # The Handle Info callback is the standard OTP way to receive messages
   @impl true
-  def handle_info({:remote_process, observation}, state) do
-    Logger.info("⚡️ Antenna picked up signal from #{observation.source_node}")
+  def handle_info({:circuits_uart, _port, data}, state) do
+    # 1. Strip noise
+    clean_data = String.trim(data)
 
-    # Pass it to the Unified Pipeline
-    # We use Task.start so the Antenna is immediately ready for the next signal
-    Task.start(fn ->
-      SwarmBrain.Pipeline.ingest_remote_signal(observation)
-    end)
+    # 2. Broadcast to the Swarm (Formation, Pipeline, etc.)
+    # We do NOT call Pipeline directly anymore.
+    Phoenix.PubSub.broadcast(SwarmBrain.PubSub, @topic, {:telemetry_packet, clean_data, state.rssi})
 
+    {:noreply, state}
+  end
+
+  # Catch-all for when we are running without real hardware
+  @impl true
+  def handle_info(_msg, state) do
     {:noreply, state}
   end
 end

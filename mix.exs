@@ -44,9 +44,11 @@ defmodule SwarmBrain.MixProject do
 
       # --- 🐝 Swarm & Distribution ---
       {:libcluster, "~> 3.4"},     # Automatic node discovery
-      {:horde, "~> 0.9.0"},        # Distributed supervision
+      {:phoenix_pubsub, "~> 2.0"}, # Phoenix.PubSub
+      {:horde, "~> 0.8"},          # Distributed supervision
       {:delta_crdt, "~> 0.6.5"},   # Conflict-free Replicated Data Types (The Shared Brain)
 
+      {:elixir_uuid, "~> 1.2"},
       # --- 🚁 Flight Control ---
       # (Optional) If this node sends MAVLink commands directly
       # {:mave, "~> 0.1.0"},       # Or your preferred MAVLink library

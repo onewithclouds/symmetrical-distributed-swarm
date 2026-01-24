@@ -26,6 +26,7 @@ This JSON file represents the complete nervous system of an Elixir Drone Swarm.
 2. 'dependency_graph': A Mermaid diagram showing how modules connect.
 3. 'runtime_config': The wiring that connects these modules at boot time.
 4. 'files': The raw code bones and skeletons.
+"""
 
 
 # --- THE X-RAY SCANNER (v8.0 - HOLOGRAPHIC) ---

@@ -1,56 +1,72 @@
-defmodule SwarmBrain.Protocol do
+defmodule SwarmBrain.Telemetry.Protocol do
   @moduledoc """
-  The Compressor.
-  Converts high-level thoughts (Structs) into low-level telegrams (Bytes).
-  Protocol Format (14 Bytes Total):
-  [HEADER(1)][ID(4)][LAT(4)][LON(4)][CLASS(1)]
+  The Vocabulary of the Void.
+  Binary packing for high-interference environments.
   """
 
-  alias SwarmBrain.Observation
-  @header 0xAA
+  # Header: 10101010 (Sync Byte)
+  @sync_byte 0xAA
 
-  # --- SERIALIZE (Struct -> Bytes) ---
-  def serialize(%Observation{} = obs) do
-    # 1. Map labels to simple integers (0=Unknown, 1=Human, 2=Tank)
-    class_id = map_label_to_byte(List.first(obs.predictions))
+  # Command Definitions
+  @cmd_delta_formation 0x01
+  @cmd_line_formation  0x02
+  @cmd_scatter         0xFF
 
-    # 2. Pack the bytes
-    # We use float-32 (Little Endian) to save space.
-    # Accuracy is ~1.5m, sufficient for swarm.
-    <<
-      @header,
-      obs.id :: integer-32-little,
-      obs.lat :: float-32-little,
-      obs.lon :: float-32-little,
-      class_id :: integer-8
-    >>
+  @doc """
+  Compresses state into a 4-byte Heartbeat Vector.
+  Format: <<SYNC, CMD, HEADING_BYTE, VELOCITY_BYTE>>
+  """
+  def encode_heartbeat(formation_type, heading_degrees, velocity_ms) do
+    cmd = command_to_byte(formation_type)
+    h_byte = compress_heading(heading_degrees)
+    v_byte = compress_velocity(velocity_ms)
+
+    <<@sync_byte, cmd, h_byte, v_byte>>
   end
 
-  # --- DESERIALIZE (Bytes -> Struct) ---
-  def deserialize(<<@header, id::integer-32-little, lat::float-32-little, lon::float-32-little, class_id::integer-8, _rest::binary>>) do
-    label = map_byte_to_label(class_id)
-
-    %Observation{
-      id: id,
-      lat: lat,
-      lon: lon,
-      timestamp: DateTime.utc_now(),
-      source_node: :remote_radio,
-      predictions: [%{label: label, score: 1.0}] # We assume radio signals are confident
-    }
+  @doc """
+  Decodes the roar of the static into actionable vector data.
+  Returns: {:ok, %{formation: atom, heading: float, velocity: float}}
+  """
+  def decode(<<@sync_byte, cmd, h, v>>) do
+    {:ok, %{
+      formation: byte_to_command(cmd),
+      heading: decompress_heading(h),
+      velocity: decompress_velocity(v)
+    }}
   end
 
-  # Fallback for garbage noise
-  def deserialize(_), do: :error
+  def decode(_noise), do: {:error, :invalid_packet}
 
-  # --- MAPPING HELPERS ---
-  defp map_label_to_byte(%{label: "person"}), do: 1
-  defp map_label_to_byte(%{label: "car"}), do: 2
-  defp map_label_to_byte(%{label: "tank"}), do: 3
-  defp map_label_to_byte(_), do: 0 # Unknown
+  # --- Compression Logic (Lossy but Robust) ---
 
-  defp map_byte_to_label(1), do: "person"
-  defp map_byte_to_label(2), do: "car"
-  defp map_byte_to_label(3), do: "tank"
-  defp map_byte_to_label(_), do: "unknown"
+  # Map 0-360 degrees to 0-255
+  defp compress_heading(degrees) do
+    degrees
+    |> Kernel.min(360.0)
+    |> Kernel.max(0.0)
+    |> (&(&1 * 255 / 360)).()
+    |> round()
+  end
+
+  defp decompress_heading(byte), do: byte * 360.0 / 255.0
+
+  # Map 0-25 m/s to 0-255 (Resolution: ~0.1 m/s)
+  defp compress_velocity(ms) do
+    ms
+    |> Kernel.min(25.0) # Cap at 25m/s
+    |> Kernel.max(0.0)
+    |> (&(&1 * 10)).()
+    |> round()
+  end
+
+  defp decompress_velocity(byte), do: byte / 10.0
+
+  defp command_to_byte(:delta), do: @cmd_delta_formation
+  defp command_to_byte(:line), do: @cmd_line_formation
+  defp command_to_byte(_), do: @cmd_scatter
+
+  defp byte_to_command(@cmd_delta_formation), do: :delta
+  defp byte_to_command(@cmd_line_formation), do: :line
+  defp byte_to_command(_), do: :scatter
 end

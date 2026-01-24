@@ -1,74 +1,54 @@
 defmodule SwarmBrain.Radio do
-  @moduledoc """
-  The Wilderness Link.
-  Talks directly to the EMAX 2W module via UART.
-  No TCP. No Handshakes. Just raw metal.
-  """
   use GenServer
   require Logger
   alias Circuits.UART
-  alias SwarmBrain.{Protocol, Pipeline}
 
-  # --- API ---
+  # The Void listens on this topic
+  @topic "radio:telemetry"
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  def broadcast(observation) do
-    GenServer.cast(__MODULE__, {:tx, observation})
+  def init(_opts) do
+    {:ok, uart_pid} = UART.start_link()
+
+    # Initialize UART (Assuming connection to EMAX/ELRS module)
+    # Active: true means messages are sent as Erlang messages, not polling.
+    UART.open(uart_pid, "/dev/ttyAMA0", speed: 420_000, active: true)
+
+    # Configure generic UART framing (Packet mode) if applicable
+    # UART.configure(uart_pid, framing: {UART.Framing.Line, separator: "\n"})
+
+    {:ok, %{uart: uart_pid, rssi: -60}}
   end
 
-  # --- CALLBACKS ---
+  # --- The "Async-Ack" Implementation ---
 
-  @impl true
-  def init(opts) do
-    port = Keyword.get(opts, :port, "/dev/ttyS0")
-    speed = Keyword.get(opts, :speed, 420_000)
+  # Standard Data Packet
+  def handle_info({:circuits_uart, _port, data}, state) do
+    # 1. Parse RSSI from hardware (Implementation depends on specific ELRS/Hardware module)
+    # For simulation, we pretend the hardware injects RSSI at end of frame
+    {clean_data, current_rssi} = extract_rssi(data)
 
-    {:ok, pid} = UART.start_link()
+    # 2. BROADCAST IMMEDIATELY. Do not call Pipeline. Do not block.
+    # The system is now event-driven.
+    Phoenix.PubSub.broadcast(SwarmBrain.PubSub, @topic, {:telemetry_packet, clean_data, current_rssi})
 
-    # Configure for Raw Binary Mode
-    # active: true means messages are sent to this process as {:circuits_uart, ...}
-
-    # SOFT FAIL FIX: We try to open. If it fails, we stay alive as a dummy.
-    case UART.open(pid, port, speed: speed, active: true) do
-      :ok ->
-        Logger.info("📡 RADIO ONLINE: Connected to #{port} at #{speed} baud.")
-        {:ok, %{uart: pid, port: port, active: true}}
-
-      {:error, reason} ->
-        Logger.warning("⚠️ RADIO OFFLINE: Could not open #{port} (#{inspect(reason)}). Entering Simulation Mode.")
-        # We return :ok anyway, so the Supervisor doesn't crash the app
-        {:ok, %{uart: nil, port: port, active: false}}
-    end
+    {:noreply, %{state | rssi: current_rssi}}
   end
 
-  # RECEIVING (RX): Incoming Bytes from EMAX
-  @impl true
-  def handle_info({:circuits_uart, _port, binary_data}, state) do
-    case Protocol.deserialize(binary_data) do
-      %SwarmBrain.Observation{} = obs ->
-        Logger.info("⚡️ RADIO RX: Received telegram ID:#{obs.id}")
-        Pipeline.ingest_remote_signal(obs)
-      :error ->
-        :ok
-    end
+  def handle_info({:uart_error, _port, reason}, state) do
+    Logger.error("Radio interference detected: #{inspect(reason)}")
     {:noreply, state}
   end
 
-  # SENDING (TX): Outgoing Observation
-  @impl true
-  def handle_cast({:tx, obs}, %{active: true} = state) do
-    packet = Protocol.serialize(obs)
-    UART.write(state.uart, packet)
-    {:noreply, state}
-  end
+  # --- Helpers ---
 
-  # SENDING (TX): Dummy Mode (Radio hardware missing)
-  def handle_cast({:tx, obs}, %{active: false} = state) do
-    Logger.debug("👻 [SIMULATION] Radio TX would send: #{inspect(obs.id)}")
-    # Here you could potentially write to a file to simulate transmission
-    {:noreply, state}
+  # Mockup of RSSI extraction. In real ELRS CRSF protocol, this is in the LinkStatistics frame.
+  defp extract_rssi(data) do
+    # If using Crossfire protocol, we would parse the LinkStats frame here.
+    # Returning dummy data for the skeleton.
+    {data, -50}
   end
 end

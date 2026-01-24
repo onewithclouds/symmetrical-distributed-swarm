@@ -1,75 +1,75 @@
 defmodule SwarmBrain.Pipeline do
-  @moduledoc """
-  The Main Circuit Board.
-  Connects Inputs -> Cortex -> Persistence.
-  Now features "Dual-Mode Switching" (WiFi vs Radio).
-  """
+  use GenServer
   require Logger
-  alias SwarmBrain.{Eye, Location, Observation, Persistence, Radio}
+  alias SwarmBrain.Observation
 
-  @cortex Application.compile_env(:swarm_brain, :cortex_module)
+  # Threshold: If signal is worse than -85dBm, stop sending JPEGs.
+  @rssi_emergency_threshold -85
 
-  # --- PUBLIC API ---
-
-  def run_local_sequence do
-    Eye.capture()
-    |> Location.stamp()
-    |> process_signal()
+  def start_link(_opts) do
+    # FIXED: Initialize with a default RSSI of -60 (Good Signal)
+    GenServer.start_link(__MODULE__, %{rssi: -60}, name: __MODULE__)
   end
 
-  def ingest_remote_signal(observation) do
-    process_signal(observation)
+  def init(state) do
+    Phoenix.PubSub.subscribe(SwarmBrain.PubSub, "radio:telemetry")
+    {:ok, state}
   end
 
-  def run_scout_sequence do
-    Eye.capture()
-    |> Location.stamp()
-    |> broadcast_to_brain()
+  # Receive Data + Signal Strength
+  def handle_info({:telemetry_packet, _data, rssi}, state) do
+    # Update local state with signal quality
+    {:noreply, Map.put(state, :rssi, rssi)}
   end
 
-  # --- INTERNAL CIRCUIT ---
-
-  # 1. DOUBLE-THINK FIX: Skip analysis if predictions exist
-  defp process_signal(%Observation{predictions: [_|_]} = obs) do
-    persist_memory(obs)
+  @doc """
+  Main Entry Point: The Eye sees something.
+  """
+  def process_visual_data(image_binary) do
+    GenServer.cast(__MODULE__, {:process_image, image_binary})
   end
 
-  # 2. FRESH DATA: Analyze it
-  defp process_signal(obs) do
-    obs
-    |> @cortex.analyze()
-    |> persist_memory()
+  def handle_cast({:process_image, image}, state) do
+    # 1. Decide WHERE to process (Horde / Global Grid)
+    processor_pid = find_best_cortex()
+
+    # Capture RSSI safely before spawning task
+    current_rssi = Map.get(state, :rssi, -60)
+
+    # 2. Decide WHAT to send back (Dynamic Compression)
+    # If we are the processor, we do the work.
+    Task.start(fn ->
+      # Let it crash. Isolate the heavy math.
+      result = GenServer.call(processor_pid, {:analyze, image}, 15_000)
+      handle_analysis_result(result, current_rssi)
+    end)
+
+    {:noreply, state}
   end
 
-  def persist_memory(obs) do
-    Persistence.save(obs)
-    send(SwarmBrain.Watchman, {:observation_stored, obs})
-    obs
-  end
-
-  # --- THE DUAL-MODE SWITCH ---
-  defp broadcast_to_brain(%Observation{} = obs) do
-    # Check for High-Bandwidth Peers (WiFi)
-    # Node.list() returns connected Erlang nodes.
-    case Node.list() do
-      [] ->
-        # 🌑 WILDERNESS MODE (No WiFi)
-        # Send a compressed telegram via EMAX 2W
-        Logger.info("🌑 No WiFi peers. Switching to RADIO TELEGRAM.")
-        Radio.broadcast(obs)
-
-        # We also process locally since we couldn't offload it
-        process_signal(obs)
-
-      peers ->
-        # ☀️ CIVILIAN MODE (WiFi Present)
-        # Send the full struct with image via TCP
-        target = Enum.random(peers)
-        Logger.info("☀️ WiFi peers found. Offloading task to #{inspect(target)}.")
-
-        # Prune heavy image if needed (optional optimization)
-        payload = Observation.prune_payload(obs)
-        send({SwarmBrain.Antenna, target}, {:remote_process, payload})
+  # --- The "Horde" Global Grid Lookup ---
+  defp find_best_cortex do
+    # Ask Horde Registry for a process named "GlobalCortex"
+    # If it exists (e.g., on the Mother Ship), use it.
+    # If not, fall back to our local Cortex.
+    case Horde.Registry.lookup(SwarmBrain.HordeRegistry, "GlobalCortex") do
+      [{pid, _} | _] -> pid
+      [] -> SwarmBrain.Cortex # Local Atom
     end
+  end
+
+  # --- Dynamic Compression Logic ---
+  defp handle_analysis_result(observation, rssi) do
+    payload =
+      if rssi < @rssi_emergency_threshold do
+        # Emergency Mode: Prune everything except Class ID and Coordinates
+        Observation.prune_payload(observation, :emergency)
+      else
+        # Full Mode: Include Metadata, Confidence scores, etc.
+        Observation.prune_payload(observation, :full)
+      end
+
+    # Send to persistence / ground station
+    SwarmBrain.Persistence.log(payload)
   end
 end
