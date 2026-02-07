@@ -1,26 +1,42 @@
 defmodule SwarmBrain.Observation do
   @moduledoc """
-  The Standard Protocol.
-  This struct is the "Signal" that flows through the Class A Amplifier.
+  The Atomic Unit of Swarm Vision.
+  Carries everything: The Image, The GPS, and The AI Analysis.
   """
+
+  # Added :lat, :lon, :alt, :predictions to satisfy Location and ResNet
   defstruct [
-    :id,              # Unique UUID for the memory
-    :image_binary,    # The raw visual data
-    :timestamp,       # When it was seen (UTC)
-    :lat,             # GPS Latitude
-    :lon,             # GPS Longitude
-    :alt,             # GPS Altitude
-    :predictions,     # The YOLO output (List of maps)
-    :source_node      # Which device took the picture
+    :id,
+    :class,
+    :confidence,
+    :bbox,
+    :timestamp,
+    :image_binary,
+    :lat, :lon, :alt,  # GPS Data
+    :predictions       # Full raw output from AI
   ]
 
-  def new(image_binary, node_name \\ Node.self()) do
+  @doc """
+  Factory method to create a new blank observation from an image.
+  """
+  def new(image_binary) do
     %__MODULE__{
-      id: :erlang.unique_integer([:positive, :monotonic]),
-      image_binary: image_binary,
+      id: UUID.uuid4(), # Requires elixr_uuid or just use system unique
       timestamp: DateTime.utc_now(),
-      source_node: node_name,
-      predictions: []
+      image_binary: image_binary
     }
   end
+
+  # --- Payload Compression ---
+
+  def prune_payload(obs, :emergency) do
+    %{c: obs.class, b: obs.bbox, l: {obs.lat, obs.lon}}
+  end
+
+  def prune_payload(obs, :full) do
+    # Strip heavy image binary before sending over network
+    %{obs | image_binary: nil}
+  end
+
+  def prune_payload(obs), do: prune_payload(obs, :full)
 end

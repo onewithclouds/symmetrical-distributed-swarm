@@ -1,0 +1,3 @@
+Failed to run rustfmt: No such file or directory (os error 2) (non-fatal, continuing)
+running: cd "/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out/build" && LC_ALL="C" MAKEFLAGS="-j --jobserver-fds=6,7 --jobserver-auth=6,7" "cmake" "--build" "/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out/build" "--target" "install" "--config" "Release"
+make: warning: -j4 forced in submake: resetting jobserver mode.

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # 🕵️ Auto-detect the local LAN IP
 # This grabs the first non-loopback IP address. 
 # If it guesses wrong on the HP, just hardcode IP="192.168.1.147"

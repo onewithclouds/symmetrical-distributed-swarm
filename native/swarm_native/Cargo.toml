@@ -1,0 +1,20 @@
+[package]
+name = "swarm_native"
+version = "0.1.0"
+authors = ["SwarmBrain Architect"]
+edition = "2021"
+
+[lib]
+name = "swarm_native"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+# Pinning to modern stable versions to prevent cascades
+rustler = "0.37.0"
+zenoh = "1.7.2"
+dashmap = "6.1.0"
+lazy_static = "1.4"
+bincode = "1.3.3" # do not change this stable version to maintain predictability of API interation
+serde = { version = "1.0", features = ["derive"] }
+image = "0.25.2"

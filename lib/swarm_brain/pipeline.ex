@@ -1,56 +1,83 @@
 defmodule SwarmBrain.Pipeline do
-  @moduledoc """
-  The Main Circuit Board.
-  It connects the Eye (Input) to the Cortex (Processing) using Process Groups.
-  """
+  use GenServer
   require Logger
-  alias SwarmBrain.{Eye, Location, Cortex, Observation, Persistence}
+  alias SwarmBrain.Observation
 
-  # ... (run_scout_sequence and run_local_sequence remain the same) ...
+  # Threshold: If signal is worse than -85dBm, stop sending JPEGs.
+  @rssi_emergency_threshold -85
 
-  def run_scout_sequence do
-    Eye.capture()
-    |> Location.stamp()
-    |> broadcast_to_brain()
+  def start_link(_opts) do
+    # FIXED: Initialize with a default RSSI of -60 (Good Signal)
+    GenServer.start_link(__MODULE__, %{rssi: -60}, name: __MODULE__)
   end
 
-  def run_local_sequence do
-    Eye.capture()
-    |> Location.stamp()
-    |> Cortex.analyze()
-    |> persist_memory()
+  def init(state) do
+    Phoenix.PubSub.subscribe(SwarmBrain.PubSub, "radio:telemetry")
+    {:ok, state}
   end
 
-  # ... (broadcast_to_brain remains the same) ...
-  defp broadcast_to_brain(%Observation{} = obs) do
-    # "pg" is Erlang's Process Group. We ask: "Who is in the 'brains' group?"
-    brains = :pg.get_members(:brains)
+  # Receive Data + Signal Strength
+  def handle_info({:telemetry_packet, _data, rssi}, state) do
+    # Update local state with signal quality
+    {:noreply, Map.put(state, :rssi, rssi)}
+  end
 
-    case brains do
-      [] ->
-        Logger.warning("📡 No Brains detected in range! Dropping packet.")
-        {:error, :no_brain}
+  @doc """
+  Main Entry Point: The Eye sees something.
+  """
+  def process_visual_data(image_binary) do
+    GenServer.cast(__MODULE__, {:process_image, image_binary})
+  end
 
-      [target | _] ->
-        Logger.info("📡 Beaming signal to brain: #{inspect(target)}")
-        send(target, {:remote_process, obs})
-        {:ok, :sent}
+  def handle_cast({:process_image, image}, state) do
+    # 1. Decide WHERE to process (Horde / Global Grid)
+    processor_pid = find_best_cortex()
+
+    # Capture RSSI safely before spawning task
+    current_rssi = Map.get(state, :rssi, -60)
+
+    # 2. Decide WHAT to send back (Dynamic Compression)
+    # If we are the processor, we do the work.
+    Task.start(fn ->
+      # Let it crash. Isolate the heavy math.
+      result = GenServer.call(processor_pid, {:analyze, image}, 15_000)
+      handle_analysis_result(result, current_rssi)
+    end)
+
+    {:noreply, state}
+  end
+
+  # --- The "Horde" Global Grid Lookup ---
+  defp find_best_cortex do
+    # Ask Horde Registry for a process named "GlobalCortex"
+    # If it exists (e.g., on the Mother Ship), use it.
+    # If not, fall back to our local Cortex.
+    case Horde.Registry.lookup(SwarmBrain.HordeRegistry, "GlobalCortex") do
+      [{pid, _} | _] -> pid
+      [] -> SwarmBrain.Cortex # Local Atom
     end
   end
 
-  # --- 4. PERSISTENCE (UPDATED) ---
+  # --- Dynamic Compression Logic ---
+defp handle_analysis_result(observation, rssi) do
 
-  def persist_memory(%Observation{predictions: [top|_]} = obs) do
-    # 1. Write to Mnesia (Disk)
-    Persistence.save(obs)
+  # 1. Broadcast to the Nervous System (Tracker, UI, etc.)
+    Phoenix.PubSub.broadcast(
+      SwarmBrain.PubSub,
+      "vision:analysis",
+      {:visual_contact, observation}
+    )
 
-    Logger.info("💾 Memory Persisted: #{top.label} (ID: #{obs.id})")
+    payload =
+      if rssi < @rssi_emergency_threshold do
+        # Emergency Mode: Prune everything except Class ID and Coordinates
+        Observation.prune_payload(observation, :emergency)
+      else
+        # Full Mode: Include Metadata, Confidence scores, etc.
+        Observation.prune_payload(observation, :full)
+      end
 
-    # 2. Notify the Watchman (Visual/CSV logging)
-    send(SwarmBrain.Watchman, {:observation_stored, obs})
-    obs
+    # Send to persistence / ground station
+    SwarmBrain.Persistence.log(payload)
   end
-
-  # Handle case where no predictions exist
-  def persist_memory(obs), do: obs
 end

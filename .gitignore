@@ -1,6 +1,26 @@
+# Elixir
 /_build
 /deps
+/.elixir_ls
+*.ez
+erl_crash.dump
+
+# Rust / Native
+/native/*/target
+/native/*/Cargo.lock
+**/*.so
+**/*.dll
+**/*.dylib
+**/*.rmeta
+**/*.rlib
+
+# Models & Large Data
 /models
+*.gguf
+*.onnx
+*.bin
+*.pt
+
+# Mnesia / Runtime
 Mnesia.*
 *.csv
-.elixir_ls

@@ -1,23 +1,20 @@
 defmodule SwarmBrain.Cortex do
-  alias SwarmBrain.Observation
-  require Logger
+  @moduledoc """
+  The High-Level Cognitive Processor.
+  It coordinates specific neural modules (like ResNet) to analyze observations.
+  """
 
-  # THE PIPELINE STEP
-  def analyze(%Observation{image_binary: bin} = obs) do
-    :telemetry.execute([:swarm, :cortex, :think], %{count: 1})
-    Logger.info("🧠 Cortex is thinking...")
+  # --- THE CONTRACT ---
+  # This makes Cortex a proper behaviour that other modules can implement.
+  @callback analyze(image_tensor :: Nx.Tensor.t()) :: {:ok, map()} | {:error, term()}
 
-    # 1. Convert Binary to Tensor
-    tensor =
-      bin
-      |> StbImage.read_binary!()
-      |> StbImage.to_nx()
+  # --- CLIENT API ---
 
-    # 2. Run the Serving (The Neural Network)
-    # We call the named process defined in Application.ex
-    %{predictions: preds} = Nx.Serving.batched_run(SwarmBrain.VisionServing, tensor)
+  def analyze(image_tensor) do
+    # Dynamically find which brain module is active (configured in config.exs)
+    # Defaulting to ResNet if not specified.
+    brain_module = Application.get_env(:swarm_brain, :cortex_module, SwarmBrain.Cortex.ResNet)
 
-    # 3. Return the annotated signal
-    %{obs | predictions: preds}
+    brain_module.analyze(image_tensor)
   end
 end

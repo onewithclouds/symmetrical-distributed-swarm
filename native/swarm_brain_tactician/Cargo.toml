@@ -1,0 +1,15 @@
+[package]
+name = "swarm_brain_tactician"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.37.0"
+# We use the 'pure' feature to avoid complex C++ linking issues on NixOS if possible,
+# but 'default' is usually faster if the flake env is correct.
+# The Engine. We enable 'cublas' if you had a GPU, but for now standard CPU.
+llama-cpp-2 = "0.1.66"
+anyhow = "1.0"

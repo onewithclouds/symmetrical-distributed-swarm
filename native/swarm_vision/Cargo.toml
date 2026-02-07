@@ -1,0 +1,19 @@
+[package]
+name = "swarm_vision"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "swarm_vision"
+crate-type = ["cdylib"]
+
+[dependencies]
+# Match Elixir's Rustler version
+rustler = "0.36.0"
+
+# The Standard Vision Stack
+# We disable default features to avoid compiling heavy AV1/TIFF codecs
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+
+# Future-Proofing: Algorithms for ROI, Edges, and Geometry
+imageproc = { version = "0.25", default-features = false }

@@ -1,0 +1,10 @@
+prefix=/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out
+exec_prefix=/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out
+libdir=/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out/lib64
+includedir=/mnt/storage/helena/brain/native/swarm_brain_tactician/target/release/build/llama-cpp-sys-2-d14cf5e22e20ac03/out/include
+
+Name: llama
+Description: Port of Facebook's LLaMA model in C/C++
+Version: 0.0.0
+Libs: -L${libdir} -lggml -lggml-base -lllama
+Cflags: -I${includedir}
