@@ -10,10 +10,12 @@ defmodule SwarmBrain.Sensor.Proprioception do
     resource = Server.get_resource()
 
     if resource do
-      bin = Native.get_fused_state(resource)
-      Nx.from_binary(bin, :f32)
+      # FIX: The NIF returns a Tuple {vx, vy, px, py}, NOT a binary.
+      # Pass it through directly to Tracker.
+      Native.get_fused_state(resource)
     else
-      Nx.tensor([0.0, 0.0, 0.0, 0.0], type: :f32)
+      # Return a Tuple matching the success shape, not a Tensor
+      {0.0, 0.0, 0.0, 0.0}
     end
   end
 

@@ -1,23 +1,20 @@
 defmodule SwarmBrain.Vision.Server do
   @moduledoc """
-  The Heart of the Vision System.
-  It owns the Rust Resource but shares it via :persistent_term for zero-latency access.
+  The Cerebellum of the Vision System.
+  Now equipped with a Self-Healing Watchdog (Auto-Bias).
   """
   use GenServer
   require Logger
   alias SwarmBrain.Vision.{Native, SharedBuffer}
   alias SwarmBrain.Cortex.Yolo
 
-  # The Global Key for the Rust Handle
   @resource_key :swarm_vision_resource
-  @tick_interval 33
+  @tick_interval 33 # ~30 FPS
+  @health_check_interval 30 # Check every 30 ticks (~1 second)
 
   def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
 
-  # --- PUBLIC API (The Zero-Latency Lookup) ---
-  def get_resource do
-    :persistent_term.get(@resource_key, nil)
-  end
+  def get_resource, do: :persistent_term.get(@resource_key, nil)
 
   @impl true
   def init(_opts) do
@@ -25,50 +22,57 @@ defmodule SwarmBrain.Vision.Server do
     width = config[:width]
     height = config[:height]
 
-    Logger.info("👁️ Vision.Server: Booting Iron Lung...")
+    Logger.info("👁️ Vision.Server: Ignition. Booting Iron Lung...")
 
-    # 1. ALLOCATE MEMORY (Rust Side)
+    # 1. ALLOCATE ARENA (Rust)
     resource = Native.init_state()
-
-    # 2. SHARE THE KEY (The Handover)
     :persistent_term.put(@resource_key, resource)
 
-    # 3. IGNITE CAMERA
-    # Note: User confirmed /dev/video1 is the target
+    # 2. START HEARTBEAT
     case Native.start_camera(resource, width, height) do
       :ok ->
-        Logger.info("👁️ Vision.Server: Camera Online.")
+        Logger.info("👁️ Vision.Server: Heartbeat Active.")
         schedule_tick()
-        {:ok, %{resource: resource, active_inferences: 0, max_concurrency: 1}}
+        {:ok, %{
+          resource: resource,
+          active_inferences: 0,
+          max_concurrency: 1,
+          tick_count: 0
+        }}
 
       error ->
-        Logger.error("❌ Failed to start camera: #{inspect(error)}")
-        {:stop, error}
+        Logger.error("❌ Vision.Server: Primary Ignition Failed: #{inspect(error)}")
+        {:stop, :camera_ignition_failure}
     end
   end
 
-  @impl true
-  def terminate(_reason, _state) do
-    :persistent_term.erase(@resource_key)
-  end
+  # --- THE WATCHDOG LOOP ---
 
-  # --- THE HEARTBEAT (YOLO SCHEDULING) ---
   @impl true
   def handle_info(:tick, state) do
+    # 1. Perform Health Check every second (~30 ticks)
+    new_tick_count = state.tick_count + 1
+
+    if rem(new_tick_count, @health_check_interval) == 0 do
+      check_physiology!(state.resource)
+    end
+
+    # 2. Process Vision (Backpressure Control)
     if state.active_inferences < state.max_concurrency do
       case SharedBuffer.get_vision_tensor() do
         {:ok, tensor} ->
           async_inference(tensor)
           schedule_tick()
-          {:noreply, %{state | active_inferences: state.active_inferences + 1}}
+          {:noreply, %{state | active_inferences: state.active_inferences + 1, tick_count: new_tick_count}}
 
         _ ->
           schedule_tick()
-          {:noreply, state}
+          {:noreply, %{state | tick_count: new_tick_count}}
       end
     else
+      # System saturated; skip frame
       schedule_tick()
-      {:noreply, state}
+      {:noreply, %{state | tick_count: new_tick_count}}
     end
   end
 
@@ -76,15 +80,35 @@ defmodule SwarmBrain.Vision.Server do
     {:noreply, %{state | active_inferences: max(0, state.active_inferences - 1)}}
   end
 
+  # --- PRIVATE HELPERS ---
+
+  defp check_physiology!(resource) do
+    # [Point 2: The Watchdog]
+    # We call the Rust NIF to see if the process is alive
+    case Native.check_health(resource) do
+      :ok ->
+        :ok # Pulse detected.
+
+      :error ->
+        Logger.warning("👻 Vision.Server: BRAIN-STEM DEATH DETECTED. Triggering Reset...")
+        # Trigger Supervisor Restart (Power Cycle)
+        exit(:camera_failure)
+    end
+  end
+
   defp async_inference(tensor) do
     parent = self()
     Task.Supervisor.start_child(SwarmBrain.Cortex.Supervisor, fn ->
       results = Yolo.analyze(tensor)
-      SwarmBrain.Blackboard.update_vision([results], %{source: :webcam})
+      SwarmBrain.Blackboard.update_vision(results, %{})
       send(parent, :inference_complete)
     end)
   end
 
-  # [FIX] This was missing!
   defp schedule_tick, do: Process.send_after(self(), :tick, @tick_interval)
+
+  @impl true
+  def terminate(_reason, _state) do
+    :persistent_term.erase(@resource_key)
+  end
 end

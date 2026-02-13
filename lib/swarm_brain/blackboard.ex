@@ -1,5 +1,8 @@
 defmodule SwarmBrain.Blackboard do
-  @moduledoc "The Distributed Hive Mind."
+  @moduledoc """
+  The Distributed Hive Mind.
+  Synchronizes the 'Vision Summary' across all nodes via CRDT.
+  """
   use GenServer
   require Logger
 
@@ -18,32 +21,39 @@ defmodule SwarmBrain.Blackboard do
   def init(_) do
     Logger.info("📡 Blackboard: Initializing Hive Connectivity...")
 
-    # 1. Start CRDT
+    # 1. Start CRDT (Conflict-free Replicated Data Type)
     {:ok, crdt_pid} = DeltaCrdt.start_link(DeltaCrdt.AWLWWMap, sync_interval: @sync_interval)
 
-    # 2. Monitor Nodes
+    # 2. Monitor Nodes (Auto-discovery)
     :net_kernel.monitor_nodes(true)
     update_neighbors(crdt_pid)
 
-    # 3. Return PROPER Struct
     {:ok, %__MODULE__{crdt: crdt_pid}}
   end
 
   # --- API ---
 
-  def update_vision(detections, _meta) do
-    GenServer.cast(__MODULE__, {:update_local_vision, detections})
+  def update_vision(summary, _meta) do
+    GenServer.cast(__MODULE__, {:update_local_vision, summary})
   end
 
   # --- CALLBACKS ---
 
-  def handle_cast({:update_local_vision, detections}, state) do
+  def handle_cast({:update_local_vision, summary}, state) do
+    # STRICT MODE: We expect 'summary' to be a Map %{label: "...", ...}
+    # The crash proved we are receiving a single Map, not a List.
+
     # 1. Hive Sync
-    best = List.first(detections) || %{label: "none"}
-    DeltaCrdt.put(state.crdt, :vision_summary, %{node: Node.self(), label: best[:label]})
+    # We broadcast our local summary to the rest of the swarm.
+    DeltaCrdt.put(state.crdt, :vision_summary, %{
+      node: Node.self(),
+      label: summary.label,
+      confidence: summary.confidence
+    })
 
     # 2. Local Reflex
-    send(SwarmBrain.Sensor.Fusion, {:visual_contact, detections})
+    # Pass the full data to Fusion for local targeting logic
+    send(SwarmBrain.Sensor.Fusion, {:visual_contact, summary})
 
     {:noreply, state}
   end
@@ -62,11 +72,7 @@ defmodule SwarmBrain.Blackboard do
   # --- PRIVATE ---
 
   defp update_neighbors(crdt_pid) do
-    # [FIX] DeltaCrdt requires a LIST, not a MapSet.
-    # We explicitly convert Node.list() (which is a list) just to be safe,
-    # but more importantly, we ensure we don't pass a MapSet if we were doing set math.
     neighbors = Node.list()
-
     Logger.debug("📡 Blackboard: Syncing with neighbors: #{inspect(neighbors)}")
     DeltaCrdt.set_neighbours(crdt_pid, neighbors)
   end

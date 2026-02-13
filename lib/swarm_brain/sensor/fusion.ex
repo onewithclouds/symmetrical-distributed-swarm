@@ -32,14 +32,12 @@ defmodule SwarmBrain.Sensor.Fusion do
   end
 
   # The message from Blackboard comes here
-  def handle_info({:visual_contact, detections}, state) do
-    # 1. Filter Logic (Simple 'best' selection for now)
-    best = List.first(detections)
+  def handle_info({:visual_contact, target_summary}, state) do
+    # FIX: We now receive a single Summary Map %{label: "...", ...}
+    # No need to call List.first/1 anymore.
 
-    if best do
-      # Write to fast memory
-      :ets.insert(@table, {@key, best})
-    end
+    # Write to fast memory immediately
+    :ets.insert(@table, {@key, target_summary})
 
     {:noreply, state}
   end

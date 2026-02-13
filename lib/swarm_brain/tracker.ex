@@ -1,7 +1,6 @@
 defmodule SwarmBrain.Tracker do
   use GenServer
   require Logger
-  # [NEW] Added Proprioception to aliases
   alias SwarmBrain.{Actor.Network, Sensor.Fusion, Sensor.Proprioception, Vision.Server}
 
   @interval 33
@@ -10,39 +9,58 @@ defmodule SwarmBrain.Tracker do
 
   def init(_) do
     Logger.info("🧠 Tracker: RL Pilot Engaging...")
+    # Use the new Axon struct if possible, or suppress warning if just a map
     params = Network.init_random_params()
     schedule_loop()
     {:ok, %{policy: params, tick: 0}}
   end
 
   def handle_info(:control_loop, state) do
-    # 1. Check if System is Online
     if Server.get_resource() do
-      # A. PROPRIOCEPTION (Rust Physics - 4 inputs)
-      physics_state = Proprioception.get_kinematics()
 
-      # B. FUSION (Visual Target)
+      # --- A. PROPRIOCEPTION (The Fix) ---
+      # Rust returns a Tuple: {vx, vy, px, py}
+      # We MUST unpack it and wrap it in a List [] for Nx.tensor
+      {vx, vy, px, py} = Proprioception.get_kinematics()
+      physics_state = Nx.tensor([vx, vy, px, py], type: :f32)
+
+      # --- B. FUSION ---
       _target = Fusion.get_visual_target()
 
-      # C. FLOW (REAL DATA - 200 inputs)
-      # [UPDATED] We now fetch the 10x10 vector grid from Rust
-      flow_grid = Proprioception.get_optical_flow()
+      # --- C. FLOW (Optical Flow Grid) ---
+      # This IS a binary from Rust, so Nx.from_binary is correct here.
+      flow_raw = Proprioception.get_optical_flow()
 
-      # D. INTENT (3 inputs)
+      flow_grid = case flow_raw do
+        %Nx.Tensor{} -> flow_raw
+        bin when is_binary(bin) -> Nx.from_binary(bin, :f32)
+        _ -> Nx.broadcast(0.0, {200}) # Fallback safety
+      end
+
+      # --- D. INTENT ---
       intent = Nx.tensor([1.0, 0.0, 0.0], type: :f32)
 
-      # Inference
-      # [NOTE] Ensure flow_grid is flat. Nx.from_binary is flat by default.
-      input = Nx.concatenate([physics_state, flow_grid, intent]) |> Nx.new_axis(0)
-      action = Network.predict(state.policy, input)
+      # --- INFERENCE ---
+      # Concatenate: Physics (4) + Flow (200) + Intent (3) = 207 Inputs
+      # We flatten flow_grid just in case shape is weird
+      input = Nx.concatenate([
+        physics_state,
+        Nx.flatten(flow_grid),
+        intent
+      ])
+      |> Nx.new_axis(0) # Batch size of 1
 
-      if rem(state.tick, 30) == 0 do
-        Logger.debug("🧠 Pilot: #{inspect(Nx.to_flat_list(action), charlists: :as_lists)}")
-      end
+      _action = Network.predict(state.policy, input)
+
+      # Logger.debug("🧠 Tracker: Tick #{state.tick} | Px: #{px}")
+
+      schedule_loop()
+      {:noreply, %{state | tick: state.tick + 1}}
+    else
+      # Iron Lung not ready yet
+      schedule_loop()
+      {:noreply, state}
     end
-
-    schedule_loop()
-    {:noreply, %{state | tick: state.tick + 1}}
   end
 
   defp schedule_loop, do: Process.send_after(self(), :control_loop, @interval)

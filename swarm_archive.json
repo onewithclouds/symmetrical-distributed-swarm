@@ -39,14 +39,14 @@
         "GenServer",
         "Logger",
         "Server.ca",
-        "Set.ne",
         "e.li",
         "e.se",
+        "ger.de",
+        "rdt.set_n",
         "rmBrain.Sensor.Fusion, {",
         "t.fi",
         "taCrdt.AWLWWMap, s",
         "taCrdt.pu",
-        "taCrdt.se",
         "taCrdt.st"
       ],
       "complexity": 7,
@@ -395,10 +395,12 @@
         "Sensor.Fusion",
         "Sensor.Proprioception",
         "SwarmBrain",
+        "Tensor{}",
         "Vision.Server",
+        "br",
         "co",
         "fl",
-        "ger.de",
+        "fr",
         "ion.ge",
         "ne",
         "prioception.ge",
@@ -689,7 +691,6 @@
       "dependencies": [
         "Native",
         "Nx",
-        "Nx.Defn",
         "Server",
         "SwarmBrain.Vision"
       ],
@@ -721,18 +722,24 @@
         "SwarmBrain.Vision.Native"
       ],
       "functions": [
+        "check_health/1",
+        "detect_change/1",
         "error/0",
         "get_flow_grid/1",
         "get_fused_state/1",
         "get_latest_frame/1",
+        "get_spatial_state/3",
+        "init_retina/3",
         "init_state/0",
-        "start_camera/3"
+        "setup_queryable/0",
+        "start_camera/3",
+        "update_spatial_state/4"
       ],
       "structs": [],
       "dependencies": [
         "Rustler"
       ],
-      "complexity": 6,
+      "complexity": 12,
       "doc": null
     },
     "SwarmBrain.Vision.Retina": {
@@ -743,28 +750,30 @@
         "cess_frame(fr/1",
         "dle_cast({:/2",
         "init/1",
-        "sor(evision_/1",
+        "r_full_inference(frame/1",
         "start_link/1",
-        "ull_inference(bin) do\n/1"
+        "tensor(evisi/1"
       ],
       "structs": [],
       "dependencies": [
-        ".detec",
+        ".analy",
+        "Application",
         "GenServer",
         "Logger",
         "Server.ca",
         "SwarmBrain.Cortex",
         "SwarmBrain.Vision.Native",
-        "alyze(",
-        "at.from_bin",
-        "at.roi({x,",
-        "at.shape(ev",
-        "at.to_binar",
-        "e(",
-        "in",
-        "ive.in"
+        "SwarmBrain.Vision.Server",
+        "ha",
+        "ive.de",
+        "m_",
+        "n.Mat.from_",
+        "n.Mat.roi({",
+        "n.Mat.shape",
+        "n.Mat.to_bi",
+        "ver.ge"
       ],
-      "complexity": 8,
+      "complexity": 9,
       "doc": null
     },
     "SwarmBrain.Vision.Behaviour": {
@@ -796,19 +805,20 @@
         "SwarmBrain.Vision.Server"
       ],
       "functions": [
+        "(tensor) do\n   /1",
         ":inference_/2",
         ":tick, stat/2",
-        "eason, _s/2",
+        "do: Process.s/0",
         "get_resource/0",
         "init/1",
-        "k, do: Proces/0",
-        "nce(tensor) do\n/1",
+        "logy!(resource) d/1",
+        "on, _stat/2",
         "start_link/1"
       ],
       "structs": [],
       "dependencies": [
-        "(ten",
         ".get_vision_",
+        ".start_child(Sw",
         "Application",
         "GenServer",
         "Logger",
@@ -816,16 +826,18 @@
         "SharedBuffer",
         "SwarmBrain.Cortex.Yolo",
         "SwarmBrain.Vision",
-        "_after(",
+        "_healt",
         "e.init",
         "e.star",
-        "lackboard.update_visi",
+        "ex.Supervisor, fn ->\n      r",
+        "kboard.update_vision(",
+        "ng(\"\ud83d\udc7b",
+        "nsor",
         "or(\"\u274c",
-        "ortex.Supervisor, fn ->",
         "r.info",
-        "sor.start_child"
+        "ter(sel"
       ],
-      "complexity": 11,
+      "complexity": 14,
       "doc": null
     },
     "SwarmBrain.Vision.SharedBuffer": {
@@ -844,7 +856,7 @@
         "Server",
         "SwarmBrain.Vision"
       ],
-      "complexity": 5,
+      "complexity": 3,
       "doc": null
     },
     "SwarmBrain.Vision.PreProcessor": {
@@ -890,7 +902,7 @@
       "doc": null
     }
   },
-  "dependency_graph": "graph TD\n  subgraph Swarm\n    SwarmBrain_MixProject[SwarmBrain.MixProject]\n    SwarmBrain_Blackboard[SwarmBrain.Blackboard]\n    SwarmBrain_Cortex[SwarmBrain.Cortex]\n    SwarmBrain_Formation[SwarmBrain.Formation]\n    SwarmBrain_Antenna[SwarmBrain.Antenna]\n    SwarmBrain_Application[SwarmBrain.Application]\n    SwarmBrain_Pipeline[SwarmBrain.Pipeline]\n    SwarmBrain_Telemetry_Codec[SwarmBrain.Telemetry.Codec]\n    SwarmBrain_Location[SwarmBrain.Location]\n    SwarmBrain_Radio[SwarmBrain.Radio]\n    SwarmBrain_Eye[SwarmBrain.Eye]\n    SwarmBrain_Watchman[SwarmBrain.Watchman]\n    SwarmBrain_Tactician[SwarmBrain.Tactician]\n    SwarmBrain_Discovery[SwarmBrain.Discovery]\n    SwarmBrain_Observation[SwarmBrain.Observation]\n    SwarmBrain_Persistence[SwarmBrain.Persistence]\n    SwarmBrain_Tracker[SwarmBrain.Tracker]\n    SwarmBrain_Telemetry_Dispatcher[SwarmBrain.Telemetry.Dispatcher]\n    SwarmBrain_Telemetry_Guard[SwarmBrain.Telemetry.Guard]\n    SwarmBrain_Telemetry_Monitor[SwarmBrain.Telemetry.Monitor]\n    SwarmBrain_Logic_Tactician[SwarmBrain.Logic.Tactician]\n    SwarmBrain_Actor_Network[SwarmBrain.Actor.Network]\n    SwarmBrain_Cortex_ResNet[SwarmBrain.Cortex.ResNet]\n    SwarmBrain_Cortex_Yolo[SwarmBrain.Cortex.Yolo]\n    SwarmBrain_Switchboard[SwarmBrain.Switchboard]\n    SwarmBrain_Cortex_Model[SwarmBrain.Cortex.Model]\n    SwarmBrain_Cortex_Watchdog[SwarmBrain.Cortex.Watchdog (C:13)]:::complex\n    SwarmBrain_Llama_Summarizer[SwarmBrain.Llama.Summarizer]\n    SwarmBrain_Hardware_Spine[SwarmBrain.Hardware.Spine (C:14)]:::complex\n    SwarmBrain_Blackboard_Fusion[SwarmBrain.Blackboard.Fusion]\n    SwarmBrain_Sensor_Proprioception[SwarmBrain.Sensor.Proprioception]\n    SwarmBrain_Sensor_Fusion[SwarmBrain.Sensor.Fusion]\n    SwarmBrain_Vision_Native[SwarmBrain.Vision.Native]\n    SwarmBrain_Vision_Retina[SwarmBrain.Vision.Retina]\n    SwarmBrain_Vision_Behaviour[SwarmBrain.Vision.Behaviour]\n    SwarmBrain_Vision_NMS[SwarmBrain.Vision.NMS]\n    SwarmBrain_Vision_Server[SwarmBrain.Vision.Server (C:11)]:::complex\n    SwarmBrain_Vision_SharedBuffer[SwarmBrain.Vision.SharedBuffer]\n    SwarmBrain_Vision_PreProcessor[SwarmBrain.Vision.PreProcessor]\n    SwarmBrain_Vision_Decoder[SwarmBrain.Vision.Decoder]\n    SwarmBrain_Vision_Yolo_PostProcessor[SwarmBrain.Vision.Yolo.PostProcessor]\n    SwarmBrain_MixProject --> SwarmBrain_Application\n    SwarmBrain_Cortex --> SwarmBrain_Cortex_ResNet\n    SwarmBrain_Formation --> SwarmBrain_Telemetry_Codec\n    SwarmBrain_Pipeline --> SwarmBrain_Cortex\n    SwarmBrain_Pipeline --> SwarmBrain_Observation\n    SwarmBrain_Pipeline --> SwarmBrain_Persistence\n    SwarmBrain_Location --> SwarmBrain_Observation\n    SwarmBrain_Eye --> SwarmBrain_Observation\n    SwarmBrain_Discovery --> SwarmBrain_Persistence\n    SwarmBrain_Telemetry_Dispatcher --> SwarmBrain_Telemetry_Guard\n    SwarmBrain_Telemetry_Guard --> SwarmBrain_Telemetry_Codec\n    SwarmBrain_Telemetry_Guard --> SwarmBrain_Telemetry_Monitor\n    SwarmBrain_Cortex_ResNet --> SwarmBrain_Cortex_Model\n    SwarmBrain_Cortex_ResNet --> SwarmBrain_Vision_PreProcessor\n    SwarmBrain_Cortex_Yolo --> SwarmBrain_Cortex_Model\n    SwarmBrain_Cortex_Yolo --> SwarmBrain_Vision_PreProcessor\n    SwarmBrain_Vision_Retina --> SwarmBrain_Cortex\n    SwarmBrain_Vision_Retina --> SwarmBrain_Vision_Native\n    SwarmBrain_Vision_Server --> SwarmBrain_Cortex_Yolo\n  end\n  classDef complex fill:#f96,stroke:#333,stroke-width:2px;",
+  "dependency_graph": "graph TD\n  subgraph Swarm\n    SwarmBrain_MixProject[SwarmBrain.MixProject]\n    SwarmBrain_Blackboard[SwarmBrain.Blackboard]\n    SwarmBrain_Cortex[SwarmBrain.Cortex]\n    SwarmBrain_Formation[SwarmBrain.Formation]\n    SwarmBrain_Antenna[SwarmBrain.Antenna]\n    SwarmBrain_Application[SwarmBrain.Application]\n    SwarmBrain_Pipeline[SwarmBrain.Pipeline]\n    SwarmBrain_Telemetry_Codec[SwarmBrain.Telemetry.Codec]\n    SwarmBrain_Location[SwarmBrain.Location]\n    SwarmBrain_Radio[SwarmBrain.Radio]\n    SwarmBrain_Eye[SwarmBrain.Eye]\n    SwarmBrain_Watchman[SwarmBrain.Watchman]\n    SwarmBrain_Tactician[SwarmBrain.Tactician]\n    SwarmBrain_Discovery[SwarmBrain.Discovery]\n    SwarmBrain_Observation[SwarmBrain.Observation]\n    SwarmBrain_Persistence[SwarmBrain.Persistence]\n    SwarmBrain_Tracker[SwarmBrain.Tracker]\n    SwarmBrain_Telemetry_Dispatcher[SwarmBrain.Telemetry.Dispatcher]\n    SwarmBrain_Telemetry_Guard[SwarmBrain.Telemetry.Guard]\n    SwarmBrain_Telemetry_Monitor[SwarmBrain.Telemetry.Monitor]\n    SwarmBrain_Logic_Tactician[SwarmBrain.Logic.Tactician]\n    SwarmBrain_Actor_Network[SwarmBrain.Actor.Network]\n    SwarmBrain_Cortex_ResNet[SwarmBrain.Cortex.ResNet]\n    SwarmBrain_Cortex_Yolo[SwarmBrain.Cortex.Yolo]\n    SwarmBrain_Switchboard[SwarmBrain.Switchboard]\n    SwarmBrain_Cortex_Model[SwarmBrain.Cortex.Model]\n    SwarmBrain_Cortex_Watchdog[SwarmBrain.Cortex.Watchdog (C:13)]:::complex\n    SwarmBrain_Llama_Summarizer[SwarmBrain.Llama.Summarizer]\n    SwarmBrain_Hardware_Spine[SwarmBrain.Hardware.Spine (C:14)]:::complex\n    SwarmBrain_Blackboard_Fusion[SwarmBrain.Blackboard.Fusion]\n    SwarmBrain_Sensor_Proprioception[SwarmBrain.Sensor.Proprioception]\n    SwarmBrain_Sensor_Fusion[SwarmBrain.Sensor.Fusion]\n    SwarmBrain_Vision_Native[SwarmBrain.Vision.Native (C:12)]:::complex\n    SwarmBrain_Vision_Retina[SwarmBrain.Vision.Retina]\n    SwarmBrain_Vision_Behaviour[SwarmBrain.Vision.Behaviour]\n    SwarmBrain_Vision_NMS[SwarmBrain.Vision.NMS]\n    SwarmBrain_Vision_Server[SwarmBrain.Vision.Server (C:14)]:::complex\n    SwarmBrain_Vision_SharedBuffer[SwarmBrain.Vision.SharedBuffer]\n    SwarmBrain_Vision_PreProcessor[SwarmBrain.Vision.PreProcessor]\n    SwarmBrain_Vision_Decoder[SwarmBrain.Vision.Decoder]\n    SwarmBrain_Vision_Yolo_PostProcessor[SwarmBrain.Vision.Yolo.PostProcessor]\n    SwarmBrain_MixProject --> SwarmBrain_Application\n    SwarmBrain_Cortex --> SwarmBrain_Cortex_ResNet\n    SwarmBrain_Formation --> SwarmBrain_Telemetry_Codec\n    SwarmBrain_Pipeline --> SwarmBrain_Cortex\n    SwarmBrain_Pipeline --> SwarmBrain_Observation\n    SwarmBrain_Pipeline --> SwarmBrain_Persistence\n    SwarmBrain_Location --> SwarmBrain_Observation\n    SwarmBrain_Eye --> SwarmBrain_Observation\n    SwarmBrain_Discovery --> SwarmBrain_Persistence\n    SwarmBrain_Telemetry_Dispatcher --> SwarmBrain_Telemetry_Guard\n    SwarmBrain_Telemetry_Guard --> SwarmBrain_Telemetry_Codec\n    SwarmBrain_Telemetry_Guard --> SwarmBrain_Telemetry_Monitor\n    SwarmBrain_Cortex_ResNet --> SwarmBrain_Cortex_Model\n    SwarmBrain_Cortex_ResNet --> SwarmBrain_Vision_PreProcessor\n    SwarmBrain_Cortex_Yolo --> SwarmBrain_Cortex_Model\n    SwarmBrain_Cortex_Yolo --> SwarmBrain_Vision_PreProcessor\n    SwarmBrain_Vision_Retina --> SwarmBrain_Cortex\n    SwarmBrain_Vision_Retina --> SwarmBrain_Vision_Native\n    SwarmBrain_Vision_Retina --> SwarmBrain_Vision_Server\n    SwarmBrain_Vision_Server --> SwarmBrain_Cortex_Yolo\n  end\n  classDef complex fill:#f96,stroke:#333,stroke-width:2px;",
   "files": [
     {
       "path": "repo_to_json.py",
@@ -1000,35 +1012,144 @@
     },
     {
       "path": "native/swarm_native/src/lib.rs",
-      "content": "//! # THE IRON LUNG (SwarmNative)\n//! \n//! This file is the \"Diamond\" tip of the architecture. It is responsible for \n//! the high-frequency (400Hz) physiological loops of the drone.\n//! \n//! ## ARCHITECTURAL TACTICS\n//! \n//! **Tactic 1: The Anchor (ResourceArc)**\n//! We hold a single `SwarmState` resource. This prevents \"object soup.\" \n//! Elixir holds the leash; Rust holds the weight.\n//! \n//! **Tactic 2: The Nervous System (Atomics)**\n//! We use `AtomicF32` (via `AtomicU32` bit-casting) for lock-free telemetry.\n//! This allows the \"Pilot\" (Elixir) to peek at velocity/position without \n//! ever stopping the \"Heart\" (Rust Camera Loop).\n//! \n//! **Tactic 3: Zero-Copy Bridge**\n//! Data is returned as raw binary structs `#[repr(C)]`. We do not serialize \n//! to JSON or Erlang Terms. We simply hand Elixir a pointer to the memory \n//! and say \"This is a Tensor now.\"\n//! \n//! **Tactic 4: The Arena (Pre-Allocation)**\n//! We allocate the `TripleBuffer` and the `FlowGrid` (200 floats) ONCE at boot.\n//! There are `Vec::new()` calls in `init_state`, but NO `Vec::push` calls \n//! in `start_camera`. This guarantees no runtime OOM (Out of Memory) crashes.\n\n// [PRESERVED] All imports, including DashMap for Spatial Memory\nuse dashmap::DashMap;\nuse lazy_static::lazy_static;\nuse rustler::{Atom, Binary, Encoder, Env, NifResult, ResourceArc, Term};\nuse std::sync::atomic::{AtomicU32, AtomicUsize, Ordering};\nuse std::sync::{Arc, Mutex, RwLock};\nuse std::thread;\nuse std::time::Instant;\n// [FIXED] Removed unused 'Child' to silence warning\nuse std::process::{Command, Stdio};\nuse std::io::Read;\n\n// --- 1. GLOBAL MEMORY (PRESERVED) ---\n// We keep this for the \"Spatial Map\" features later (SLAM).\nlazy_static! {\n    static ref SPATIAL_MAP: DashMap<String, Vec<f32>> = DashMap::new();\n}\n\n// --- 2. ATOMIC NERVOUS SYSTEM (TACTIC 2) ---\n#[repr(align(64))]\nstruct AtomicF32 {\n    storage: AtomicU32,\n}\n\nimpl AtomicF32 {\n    fn new(val: f32) -> Self {\n        Self { storage: AtomicU32::new(val.to_bits()) }\n    }\n    fn load(&self) -> f32 {\n        f32::from_bits(self.storage.load(Ordering::Acquire))\n    }\n    fn store(&self, val: f32) {\n        self.storage.store(val.to_bits(), Ordering::Relaxed);\n    }\n}\n\n/// The Proprioception State.\nstruct Kinematics {\n    px: AtomicF32,\n    py: AtomicF32,\n    vx: AtomicF32,\n    vy: AtomicF32,\n}\n\n// --- 3. THE FRAME BUFFER ARENA (TACTIC 4) ---\nstruct FrameBuffer {\n    data: Mutex<Vec<u8>>,\n}\n\nstruct TripleBufferState {\n    slots: [Arc<FrameBuffer>; 3],\n    write_idx: AtomicUsize, \n    ready_idx: AtomicUsize,\n    last_flow_grid: Mutex<Vec<u8>>, \n}\n\n// --- 4. THE SWARM RESOURCE (TACTIC 1) ---\nstruct SwarmState {\n    buffer: Arc<TripleBufferState>,\n    kinematics: Arc<Kinematics>,\n    running: Arc<AtomicU32>, \n    \n    // [TACTIC 4] The Flow Grid.\n    flow_grid: Arc<RwLock<[f32; 200]>>, \n}\n\nimpl Drop for SwarmState {\n    fn drop(&mut self) {\n        self.running.store(0, Ordering::Release);\n    }\n}\n\n// --- 5. INITIALIZATION ---\n\n// [HELPER] Pure Rust allocation logic\nfn create_swarm_state() -> SwarmState {\n    let frame_size = 640 * 480 * 3;\n    \n    let buffer = Arc::new(TripleBufferState {\n        slots: [\n            Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; frame_size]) }),\n            Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; frame_size]) }),\n            Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; frame_size]) }),\n        ],\n        write_idx: AtomicUsize::new(0),\n        ready_idx: AtomicUsize::new(2),\n        last_flow_grid: Mutex::new(vec![0u8; frame_size]), \n    });\n\n    let kinematics = Arc::new(Kinematics {\n        px: AtomicF32::new(0.0),\n        py: AtomicF32::new(0.0),\n        vx: AtomicF32::new(0.0),\n        vy: AtomicF32::new(0.0),\n    });\n\n    SwarmState {\n        buffer,\n        kinematics,\n        running: Arc::new(AtomicU32::new(1)),\n        flow_grid: Arc::new(RwLock::new([0.0; 200])),\n    }\n}\n\nfn load(env: Env, _info: Term) -> bool {\n    rustler::resource!(SwarmState, env);\n    true\n}\n\n#[rustler::nif]\nfn init_state() -> ResourceArc<SwarmState> {\n    ResourceArc::new(create_swarm_state())\n}\n\n// --- 6. OPTICAL FLOW MATH (THE INSECT EYE) ---\nfn calculate_optical_flow(\n    current: &[u8], \n    prev: &[u8], \n    width: usize, \n    height: usize,\n    grid_out: &mut [f32; 200] \n) -> (f32, f32) {\n    let mut total_dx = 0;\n    let mut total_dy = 0;\n    let mut points = 0;\n\n    let step_x = width / 10;\n    let step_y = height / 10;\n    let search_range = 16; \n\n    let mut g_idx = 0;\n\n    for y in (search_range..(height - search_range)).step_by(step_y) {\n        for x in (search_range..(width - search_range)).step_by(step_x) {\n            \n            if g_idx >= 100 { break; }\n\n            let mut best_sad = u32::MAX;\n            let mut best_dx = 0;\n            let mut best_dy = 0;\n\n            let p_idx = (y * width + x) * 3 + 1;\n            let p_val = prev[p_idx] as i32;\n\n            for dy in -4..=4 { \n                for dx in -4..=4 {\n                    let c_idx = ((y as i32 + dy) as usize * width + (x as i32 + dx) as usize) * 3 + 1;\n                    let c_val = current[c_idx] as i32;\n                    let sad = (p_val - c_val).abs() as u32;\n                    if sad < best_sad {\n                        best_sad = sad;\n                        best_dx = dx;\n                        best_dy = dy;\n                    }\n                }\n            }\n            \n            grid_out[g_idx * 2] = best_dx as f32;\n            grid_out[g_idx * 2 + 1] = best_dy as f32;\n            g_idx += 1;\n\n            if best_sad < 50 { \n                total_dx += best_dx;\n                total_dy += best_dy;\n                points += 1;\n            }\n        }\n    }\n\n    while g_idx < 100 {\n        grid_out[g_idx * 2] = 0.0;\n        grid_out[g_idx * 2 + 1] = 0.0;\n        g_idx += 1;\n    }\n\n    if points > 0 {\n        (total_dx as f32 / points as f32, total_dy as f32 / points as f32)\n    } else {\n        (0.0, 0.0)\n    }\n}\n\n// --- 7. CAMERA THREAD ---\n#[rustler::nif(schedule = \"DirtyCpu\")]\nfn start_camera(env: Env, state: ResourceArc<SwarmState>, width: u32, height: u32) -> NifResult<Atom> {\n    let buffer_ref = state.buffer.clone();\n    let kinematics_ref = state.kinematics.clone();\n    let grid_ref = state.flow_grid.clone(); \n    let running_signal = state.running.clone(); \n    \n    let expected_size = (width * height * 3) as usize;\n\n    thread::spawn(move || {\n        let mut child = Command::new(\"ffmpeg\")\n            .args(&[\n                \"-f\", \"v4l2\", \"-framerate\", \"30\", \"-video_size\", &format!(\"{}x{}\", width, height),\n                \"-i\", \"/dev/video1\", \n                \"-f\", \"rawvideo\", \"-pix_fmt\", \"rgb24\", \"-\"\n            ])\n            .stdout(Stdio::piped())\n            .stderr(Stdio::null()) \n            .spawn()\n            .expect(\"Failed to start FFmpeg\");\n\n        let mut stdout = child.stdout.take().expect(\"Failed to open stdout\");\n        let mut last_time = Instant::now();\n        let mut current_w_idx = 0;\n        \n        let mut local_grid = [0.0f32; 200]; \n\n        while running_signal.load(Ordering::Acquire) == 1 {\n            let r_idx = buffer_ref.ready_idx.load(Ordering::Acquire);\n            let next_w_idx = (0..3).find(|&i| i != r_idx && i != current_w_idx).unwrap_or((current_w_idx + 1) % 3); \n            let slot = &buffer_ref.slots[next_w_idx];\n\n            {\n                let mut data = slot.data.lock().unwrap();\n                if data.len() != expected_size { data.resize(expected_size, 0); }\n                \n                if let Err(_) = stdout.read_exact(&mut data) { break; }\n\n                let mut prev_frame = buffer_ref.last_flow_grid.lock().unwrap();\n                if prev_frame.len() == expected_size {\n                    let (dx, dy) = calculate_optical_flow(&data, &prev_frame, width as usize, height as usize, &mut local_grid);\n                    \n                    // 1. UPDATE KINEMATICS\n                    let dt = last_time.elapsed().as_secs_f32();\n                    last_time = Instant::now();\n                    \n                    let old_vx = kinematics_ref.vx.load();\n                    let old_vy = kinematics_ref.vy.load();\n                    let new_vx = old_vx * 0.7 + dx * 0.3; \n                    let new_vy = old_vy * 0.7 + dy * 0.3;\n                    \n                    kinematics_ref.vx.store(new_vx);\n                    kinematics_ref.vy.store(new_vy);\n                    \n                    let old_px = kinematics_ref.px.load();\n                    let old_py = kinematics_ref.py.load();\n                    kinematics_ref.px.store(old_px + new_vx * dt);\n                    kinematics_ref.py.store(old_py + new_vy * dt);\n\n                    // 2. UPDATE GRID MEMORY\n                    if let Ok(mut g) = grid_ref.write() {\n                        g.copy_from_slice(&local_grid);\n                    }\n                }\n                prev_frame.copy_from_slice(&data);\n            }\n            buffer_ref.ready_idx.store(next_w_idx, Ordering::Release);\n            buffer_ref.write_idx.store(next_w_idx, Ordering::Relaxed);\n            current_w_idx = next_w_idx;\n        }\n        let _ = child.kill();\n    });\n    Ok(Atom::from_str(env, \"ok\").unwrap())\n}\n\n// --- 8. DATA RETRIEVAL NIFS ---\n\n#[rustler::nif]\nfn get_latest_frame(env: Env, state: ResourceArc<SwarmState>) -> NifResult<Binary> {\n    let buffer = &state.buffer;\n    let r_idx = buffer.ready_idx.load(Ordering::Acquire);\n    let slot = &buffer.slots[r_idx];\n    \n    let data = slot.data.lock().unwrap();\n    let mut binary = rustler::NewBinary::new(env, data.len());\n    binary.as_mut_slice().copy_from_slice(&data);\n    \n    Ok(binary.into())\n}\n\n#[repr(C)]\n#[derive(Copy, Clone)]\nstruct FusedStateOutput {\n    px: f32, py: f32, vx: f32, vy: f32 \n}\n\n#[rustler::nif]\nfn get_fused_state(env: Env, state: ResourceArc<SwarmState>) -> Binary {\n    let k = &state.kinematics;\n    let output = FusedStateOutput {\n        px: k.px.load(),\n        py: k.py.load(),\n        vx: k.vx.load(),\n        vy: k.vy.load(),\n    };\n\n    let slice = unsafe {\n        std::slice::from_raw_parts(\n            &output as *const _ as *const u8,\n            std::mem::size_of::<FusedStateOutput>()\n        )\n    };\n\n    let mut binary = rustler::NewBinary::new(env, slice.len());\n    binary.as_mut_slice().copy_from_slice(slice);\n    binary.into()\n}\n\n#[rustler::nif]\nfn get_flow_grid(env: Env, state: ResourceArc<SwarmState>) -> Binary {\n    let grid_lock = state.flow_grid.read().unwrap();\n    \n    let byte_slice = unsafe {\n        std::slice::from_raw_parts(\n            grid_lock.as_ptr() as *const u8,\n            800 \n        )\n    };\n\n    let mut binary = rustler::NewBinary::new(env, 800);\n    binary.as_mut_slice().copy_from_slice(byte_slice);\n    binary.into()\n}\n\n// --- 9. LEGACY STUBS (PRESERVED) ---\n\n#[rustler::nif]\nfn update_spatial_state(env: Env, _id: String, _x: f32, _y: f32, _h: f32) -> Atom {\n    Atom::from_str(env, \"ok\").unwrap()\n}\n\n#[rustler::nif]\nfn get_spatial_state(env: Env, _id: String) -> Term {\n    rustler::types::atom::nil().to_term(env)\n}\n\n#[rustler::nif]\nfn setup_queryable(env: Env) -> Atom {\n    Atom::from_str(env, \"ok\").unwrap()\n}\n\n#[rustler::nif]\nfn init_retina(_w: u32, _h: u32, _t: u32) -> ResourceArc<SwarmState> {\n    ResourceArc::new(create_swarm_state())\n}\n\n// [FIXED] ADDED LIFETIMES <'a>\n// Rust requires us to specify that the returned Term lives as long as the Env.\n#[rustler::nif]\nfn detect_change<'a>(env: Env<'a>, state: ResourceArc<SwarmState>, frame: Binary<'a>) -> Term<'a> {\n    let buffer = &state.buffer;\n    let frame_slice = frame.as_slice();\n\n    let prev_frame = buffer.last_flow_grid.lock().unwrap();\n    \n    if prev_frame.len() != frame_slice.len() {\n        return Atom::from_str(env, \"no_change\").unwrap().to_term(env);\n    }\n\n    let step = 10;\n    let limit = frame_slice.len();\n    let mut diff_count = 0;\n    let mut min_x = 640;\n    let mut max_x = 0;\n    let mut min_y = 480;\n    let mut max_y = 0;\n\n    for i in (1..limit).step_by(step * 3) {\n        let val_c = frame_slice[i] as i32;\n        let val_p = prev_frame[i] as i32;\n        \n        if (val_c - val_p).abs() > 30 {\n            diff_count += 1;\n            \n            let pixel_idx = i / 3;\n            let x = pixel_idx % 640;\n            let y = pixel_idx / 640;\n\n            if x < min_x { min_x = x; }\n            if x > max_x { max_x = x; }\n            if y < min_y { min_y = y; }\n            if y > max_y { max_y = y; }\n        }\n    }\n\n    if diff_count > 50 {\n        let w = if max_x > min_x { max_x - min_x } else { 0 };\n        let h = if max_y > min_y { max_y - min_y } else { 0 };\n\n        let change_atom = Atom::from_str(env, \"change\").unwrap();\n        let tuple = (min_x as u32, min_y as u32, w as u32, h as u32);\n        \n        return (change_atom, tuple).encode(env);\n    }\n\n    Atom::from_str(env, \"no_change\").unwrap().to_term(env)\n}\n\n// --- REGISTRATION ---\nrustler::init!(\"Elixir.SwarmBrain.Vision.Native\", load = load);",
+      "content": "// native/swarm_native/src/lib.rs\n\n//! # THE IRON LUNG (SwarmNative) - Refactored\n//! \n//! This is the \"Diamond\" tip of the architecture, now modularized \n//! for Class A performance and maintainability.\n\n// 1. Module Registration\n// These must match the folder names in src/\nmod types;\nmod state;\nmod vision;\nmod nifs;\n\nuse rustler::{Env, Term};\n\n/// The 'on_load' handler. \n/// Registers the SwarmState resource so the BEAM can manage its lifecycle.\nfn load(env: Env, _info: Term) -> bool {\n    // Matches src/state/arena.rs\n    rustler::resource!(state::arena::SwarmState, env);\n    true\n}\n\n// THE FINAL MANIFEST\nrustler::init!(\n    \"Elixir.SwarmBrain.Vision.Native\",\n    [\n        // 1. Control Path (nifs/control.rs)\n        nifs::control::init_state,\n        nifs::control::start_camera,\n        nifs::control::check_health,\n\n        // 2. Telemetry Path (nifs/telemetry.rs)\n        // CHANGED: 'sensing' -> 'telemetry' to match your file name\n        nifs::telemetry::get_latest_frame,\n        nifs::telemetry::get_fused_state,\n        nifs::telemetry::get_flow_grid,\n\n        // 3. Legacy Path (nifs/legacy.rs)\n        // Note: Removed 'setup_queryable'/'init_retina' as they are not in legacy.rs\n        nifs::legacy::detect_change,\n        nifs::legacy::update_spatial_state,\n        nifs::legacy::get_spatial_state\n    ],\n    load = load\n);",
+      "skeleton": {
+        "structs": [],
+        "functions": [
+          "load"
+        ],
+        "complexity": 0
+      }
+    },
+    {
+      "path": "native/swarm_native/src/types/atomic_f32.rs",
+      "content": "// native/swarm_native/src/types/atomic_f32.rs\n\nuse std::sync::atomic::{AtomicU32, Ordering};\n\n/// A floating-point number that can be safely shared between threads.\n///\n/// # ARCHITECTURAL TACTIC: Cache Isolation\n/// We use `#[repr(align(64))]` to ensure that this value occupies its own\n/// exclusive cache line. This prevents \"False Sharing\" where a write to 'vx'\n/// invalidates the CPU cache for 'vy' just because they are neighbors.\n///\n/// Size penalty: Each float takes 64 bytes instead of 4.\n/// Benefit: Zero bus contention between Camera (Write) and Elixir (Read).\n#[repr(align(64))]\npub struct AtomicF32 {\n    storage: AtomicU32,\n}\n\nimpl AtomicF32 {\n    /// Create a new atomic float.\n    pub fn new(val: f32) -> Self {\n        let bit_cast = val.to_bits();\n        Self {\n            storage: AtomicU32::new(bit_cast),\n        }\n    }\n\n    /// Load the value (Elixir Reading).\n    /// Ordering::Acquire ensures we see the latest write from the camera loop.\n    #[inline(always)]\n    pub fn load(&self) -> f32 {\n        let bit_cast = self.storage.load(Ordering::Acquire);\n        f32::from_bits(bit_cast)\n    }\n\n    /// Store a value (Camera Writing).\n    /// Ordering::Release ensures that all math prior to this store is visible\n    /// to the reader.\n    #[inline(always)]\n    pub fn store(&self, val: f32) {\n        let bit_cast = val.to_bits();\n        self.storage.store(bit_cast, Ordering::Release);\n    }\n}\n\n// Allow default initialization (0.0)\nimpl Default for AtomicF32 {\n    fn default() -> Self {\n        Self::new(0.0)\n    }\n}",
       "skeleton": {
         "structs": [
-          "AtomicF32",
+          "AtomicF32"
+        ],
+        "functions": [
+          "default",
+          "load",
+          "new",
+          "store"
+        ],
+        "complexity": 0
+      }
+    },
+    {
+      "path": "native/swarm_native/src/types/mod.rs",
+      "content": "// native/swarm_native/src/types/mod.rs\n\npub mod atomic_f32;\n\n// Re-export the primitive for easier access\npub use atomic_f32::AtomicF32;\n\n/// The Physiological State of the Drone.\n///\n/// This struct aggregates the atomic telemetry.\n/// Because each `AtomicF32` is aligned to 64 bytes (cache line isolation),\n/// this struct guarantees no \"False Sharing\" between the Camera Thread (Writer)\n/// and the NIF Thread (Reader).\npub struct Kinematics {\n    pub vx: AtomicF32, // Velocity X\n    pub vy: AtomicF32, // Velocity Y\n    pub px: AtomicF32, // Position X (Integrated)\n    pub py: AtomicF32, // Position Y (Integrated)\n}\n\n// Zero-initialization for boot\nimpl Default for Kinematics {\n    fn default() -> Self {\n        Self {\n            vx: AtomicF32::new(0.0),\n            vy: AtomicF32::new(0.0),\n            px: AtomicF32::new(0.0),\n            py: AtomicF32::new(0.0),\n        }\n    }\n}",
+      "skeleton": {
+        "structs": [
+          "Kinematics"
+        ],
+        "functions": [
+          "default"
+        ],
+        "complexity": 0
+      }
+    },
+    {
+      "path": "native/swarm_native/src/state/arena.rs",
+      "content": "// native/swarm_native/src/state/arena.rs\n\nuse std::sync::{Arc, Mutex, RwLock};\nuse std::sync::atomic::{AtomicU32, AtomicUsize};\nuse std::process::Child;\nuse dashmap::DashMap; // <--- Critical for legacy support\nuse crate::types::Kinematics;\n\n// Constants for Pre-Allocation\npub const FRAME_WIDTH: usize = 640;\npub const FRAME_HEIGHT: usize = 480;\npub const FRAME_CHANNELS: usize = 3;\npub const FRAME_SIZE: usize = FRAME_WIDTH * FRAME_HEIGHT * FRAME_CHANNELS;\n\n/// The Raw Frame container.\npub struct FrameBuffer {\n    pub data: Mutex<Vec<u8>>,\n}\n\n/// The Triple Buffer state machine.\n/// Note: 'last_flow_grid' is REMOVED here because it is now thread-local in camera.rs\npub struct TripleBufferState {\n    pub slots: [Arc<FrameBuffer>; 3],\n    pub write_idx: AtomicUsize, \n    pub ready_idx: AtomicUsize,\n}\n\n/// The Swarm Resource (The \"God Object\" handle).\n#[derive(Clone)] // 1. Allow cloning the handle\npub struct SwarmState {\n    // 1. The Nervous System (400Hz Path)\n    pub physiology: Arc<Kinematics>,        \n    \n    // 2. The Visual Cortex (30Hz Path)\n    pub memory: Arc<TripleBufferState>,     \n    \n    // 3. The Health Monitor (Process Path)\n    pub child_process: Arc<Mutex<Option<Child>>>,\n    \n    // 4. The Kill Switch (Control Path)\n    pub running: Arc<AtomicU32>,            \n    \n    // 5. The Insect Eye (Math Path - Optical Flow Grid)\n    pub flow_grid: Arc<RwLock<[f32; 200]>>, \n\n    // 6. The Spatial Memory (Legacy/Spatial Path)\n    // Kept here so NIFs can access it via the main resource handle.\n    pub spatial_memory: Arc<DashMap<(i32, i32), u32>>, \n}\n\nimpl SwarmState {\n    pub fn new() -> Self {\n        let buffer = Arc::new(TripleBufferState {\n            slots: [\n                Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; FRAME_SIZE]) }),\n                Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; FRAME_SIZE]) }),\n                Arc::new(FrameBuffer { data: Mutex::new(vec![0u8; FRAME_SIZE]) }),\n            ],\n            write_idx: AtomicUsize::new(0),\n            ready_idx: AtomicUsize::new(2),\n        });\n\n        Self {\n            physiology: Arc::new(Kinematics::default()),\n            memory: buffer,\n            child_process: Arc::new(Mutex::new(None)),\n            running: Arc::new(AtomicU32::new(1)),\n            flow_grid: Arc::new(RwLock::new([0.0; 200])),\n            spatial_memory: Arc::new(DashMap::new()), // Initialize the storage\n        }\n    }\n}\n\nimpl std::panic::RefUnwindSafe for SwarmState {}",
+      "skeleton": {
+        "structs": [
           "FrameBuffer",
-          "FusedStateOutput",
-          "Kinematics",
           "SwarmState",
           "TripleBufferState"
         ],
         "functions": [
-          "calculate_optical_flow",
-          "create_swarm_state",
-          "detect_change",
-          "drop",
+          "new"
+        ],
+        "complexity": 0
+      }
+    },
+    {
+      "path": "native/swarm_native/src/state/mod.rs",
+      "content": "// native/swarm_native/src/state/mod.rs\n\npub mod arena;"
+    },
+    {
+      "path": "native/swarm_native/src/nifs/telemetry.rs",
+      "content": "// native/swarm_native/src/nifs/telemetry.rs\n\nuse rustler::{Env, ResourceArc, Binary, OwnedBinary};\nuse std::sync::atomic::Ordering;\nuse crate::state::arena::{SwarmState, FRAME_SIZE};\n\n/// Returns the Optical Flow grid (200 floats) as a raw binary.\n/// Elixir Nx can cast this directly to a Tensor:\n/// t = Nx.from_binary(bin, {:f, 32})\n#[rustler::nif]\npub fn get_flow_grid(env: Env, state: ResourceArc<SwarmState>) -> Binary {\n    let grid_lock = state.flow_grid.read().unwrap();\n    \n    // Create an owned binary of the correct size (200 floats * 4 bytes)\n    let mut binary = OwnedBinary::new(200 * 4).unwrap();\n    \n    // Unsafe copy for speed (we know the sizes match perfectly)\n    let src_ptr = grid_lock.as_ptr() as *const u8;\n    let dst_ptr = binary.as_mut_slice().as_mut_ptr();\n    \n    unsafe {\n        std::ptr::copy_nonoverlapping(src_ptr, dst_ptr, 200 * 4);\n    }\n    \n    binary.release(env)\n}\n\n/// Returns the latest camera frame from the Triple Buffer.\n/// Logic: Read 'ready_idx', lock that slot, copy to Binary.\n#[rustler::nif]\npub fn get_latest_frame(env: Env, state: ResourceArc<SwarmState>) -> Binary {\n    let ready_idx = state.memory.ready_idx.load(Ordering::Acquire);\n    let slot = &state.memory.slots[ready_idx];\n    \n    let frame_guard = slot.data.lock().unwrap();\n    \n    // Copy the frame data into an Elixir Binary\n    let mut binary = OwnedBinary::new(FRAME_SIZE).unwrap();\n    binary.as_mut_slice().copy_from_slice(&frame_guard);\n    \n    binary.release(env)\n}\n\n/// Returns the Fused Kinematics (Vx, Vy, Px, Py)\n#[rustler::nif]\npub fn get_fused_state(state: ResourceArc<SwarmState>) -> (f32, f32, f32, f32) {\n    let phys = &state.physiology;\n    (\n        phys.vx.load(),\n        phys.vy.load(),\n        phys.px.load(),\n        phys.py.load()\n    )\n}",
+      "skeleton": {
+        "structs": [],
+        "functions": [
           "get_flow_grid",
           "get_fused_state",
-          "get_latest_frame",
-          "get_spatial_state",
-          "init_retina",
+          "get_latest_frame"
+        ],
+        "complexity": 0
+      }
+    },
+    {
+      "path": "native/swarm_native/src/nifs/control.rs",
+      "content": "// native/swarm_native/src/nifs/control.rs\n\nuse rustler::ResourceArc;\nuse crate::state::arena::SwarmState;\nuse crate::vision::camera;\nuse rustler::Atom; // Add Atom to imports\n\n/// The Watchdog Probe.\n/// Checks if the FFmpeg child process is still running.\n/// Returns :ok if alive, :error if dead or missing.\n#[rustler::nif]\npub fn check_health(state: ResourceArc<SwarmState>) -> Atom {\n    // Lock the child process mutex\n    let mut lock = state.child_process.lock().unwrap();\n    \n    match *lock {\n        Some(ref mut child) => {\n            // try_wait() is non-blocking. \n            // It returns Ok(Some(status)) if the process has exited.\n            // It returns Ok(None) if the process is still running.\n            match child.try_wait() {\n                Ok(None) => rustler::types::atom::ok(),       // Alive\n                Ok(Some(_)) => rustler::types::atom::error(), // Dead (Exited)\n                Err(_) => rustler::types::atom::error(),      // Error checking\n            }\n        },\n        None => rustler::types::atom::error(), // No camera started\n    }\n}\n\n/// Tactic 1: The Anchor\n/// Allocates the entire memory arena (Triple Buffer + Flow Grid) upfront.\n#[rustler::nif]\npub fn init_state() -> ResourceArc<SwarmState> {\n    ResourceArc::new(SwarmState::new())\n}\n\n/// Tactic 4: The Heartbeat\n/// Spawns the dedicated OS thread for FFmpeg.\n\n#[rustler::nif]\npub fn start_camera(state: ResourceArc<SwarmState>, width: u32, height: u32) -> Atom {    \n    // FIX: Dereference the ResourceArc (*) to get to the SwarmState, \n    // then Clone it to get an owned struct.\n    let state_owned = (*state).clone(); \n    \n    camera::spawn_heartbeat(state_owned, width, height);\n    rustler::types::atom::ok()\n}",
+      "skeleton": {
+        "structs": [],
+        "functions": [
+          "check_health",
           "init_state",
-          "load",
-          "new",
-          "setup_queryable",
-          "start_camera",
-          "store",
+          "start_camera"
+        ],
+        "complexity": 2
+      }
+    },
+    {
+      "path": "native/swarm_native/src/nifs/legacy.rs",
+      "content": "// native/swarm_native/src/nifs/legacy.rs\n\nuse rustler::ResourceArc;\nuse std::sync::atomic::Ordering;\nuse crate::state::arena::{SwarmState, FRAME_WIDTH, FRAME_HEIGHT};\nuse crate::vision::detector; // Import the Logic\n\n#[rustler::nif]\npub fn update_spatial_state(state: ResourceArc<SwarmState>, x: i32, y: i32, status: u32) -> String {\n    state.spatial_memory.insert((x, y), status);\n    \"ok\".to_string()\n}\n\n#[rustler::nif]\npub fn get_spatial_state(state: ResourceArc<SwarmState>, x: i32, y: i32) -> u32 {\n    match state.spatial_memory.get(&(x, y)) {\n        Some(val) => *val,\n        None => 0,\n    }\n}\n\n/// The \"Wake-on-Motion\" Trigger.\n///\n/// Tactic: Triple Buffer Roulette.\n/// We compare the 'Ready' slot (Current) against the 'Idle' slot (Reference).\n/// This allows us to detect change without allocating a dedicated background buffer.\n#[rustler::nif]\npub fn detect_change(state: ResourceArc<SwarmState>) -> (u32, u32, u32, u32) {\n    let memory = &state.memory;\n\n    // 1. Identify the Slots\n    // We load Acquire to ensure we see the latest updates from the camera thread.\n    let ready_idx = memory.ready_idx.load(Ordering::Acquire);\n    let write_idx = memory.write_idx.load(Ordering::Acquire);\n\n    // Find the \"Cold\" slot. It's the one that is neither Ready nor Writing.\n    // In a 3-slot system, there is always exactly one such slot.\n    let ref_idx = (0..3)\n        .find(|&i| i != ready_idx && i != write_idx)\n        .unwrap_or((ready_idx + 1) % 3); // Fallback (should never happen)\n\n    // 2. Lock and Load\n    // We lock the slots to prevent data tearing, though contention is low.\n    let current_slot = &memory.slots[ready_idx];\n    let ref_slot = &memory.slots[ref_idx];\n\n    // Lock scopes\n    let current_guard = current_slot.data.lock().unwrap();\n    let ref_guard = ref_slot.data.lock().unwrap();\n\n    // 3. Execute the Vision Logic (Stateless)\n    // Step 10 = Scan every 10th pixel (High speed, lower accuracy)\n    let result = detector::calculate_motion_bbox(\n        &current_guard,\n        &ref_guard,\n        FRAME_WIDTH,\n        FRAME_HEIGHT,\n        10 \n    );\n\n    // 4. Return to Elixir\n    match result {\n        Some(roi) => (roi.x, roi.y, roi.w, roi.h),\n        None => (0, 0, 0, 0),\n    }\n}",
+      "skeleton": {
+        "structs": [],
+        "functions": [
+          "detect_change",
+          "get_spatial_state",
           "update_spatial_state"
         ],
-        "complexity": 22
+        "complexity": 2
+      }
+    },
+    {
+      "path": "native/swarm_native/src/nifs/mod.rs",
+      "content": "// native/swarm_native/src/nifs/mod.rs\n\npub mod control;   // init_state, start_camera\npub mod telemetry; // get_fused_state, get_latest_frame\npub mod legacy;    // detect_change, update_spatial_state"
+    },
+    {
+      "path": "native/swarm_native/src/vision/math.rs",
+      "content": "// native/swarm_native/src/vision/math.rs\n\n/// THE INSECT EYE (Optical Flow Core)\n/// Tactic 3: Zero-Copy Math.\n/// We treat the RGB buffer as a flat signal and sample the 'Green' channel \n/// (index 1) for the highest luminance signal-to-noise ratio.\n\n#[inline(always)]\npub fn calculate_optical_flow(\n    current: &[u8],\n    prev: &[u8],\n    width: usize,\n    height: usize,\n    grid_out: &mut [f32; 200], // 10x10 grid, 2 floats per point\n) -> (f32, f32) {\n    let mut total_dx = 0;\n    let mut total_dy = 0;\n    let mut points = 0;\n\n    let step_x = width / 10;\n    let step_y = height / 10;\n    \n    // Safety Margin: Search Range (4) + Block Radius (4) + Padding\n    let margin = 20; \n\n    for g_y in 0..10 {\n        for g_x in 0..10 {\n            // Grid point coordinates\n            let x = margin + g_x * step_x;\n            let y = margin + g_y * step_y;\n            \n            // Analyze the 8x8 block at this position\n            let (dx, dy, score) = find_best_block_match(current, prev, x, y, width, 4);\n\n            let idx = (g_y * 10 + g_x) * 2;\n            grid_out[idx] = dx as f32;\n            grid_out[idx + 1] = dy as f32;\n\n            // Strict threshold: SAD score per pixel must be low\n            // 8x8 = 64 pixels. Score < 800 means avg error < 12.5 per pixel\n            if score < 800 { \n                total_dx += dx;\n                total_dy += dy;\n                points += 1;\n            }\n        }\n    }\n\n    if points > 0 {\n        (total_dx as f32 / points as f32, total_dy as f32 / points as f32)\n    } else {\n        (0.0, 0.0)\n    }\n}\n\n/// TRUE Block Matcher (8x8 Kernel)\n/// Now using an inner loop so LLVM can actually vectorize the subtraction.\n#[inline(always)]\nfn find_best_block_match(\n    current: &[u8],\n    prev: &[u8],\n    cx: usize,      // Center X\n    cy: usize,      // Center Y\n    width: usize,\n    range: i32,     // Search range (e.g., +/- 4 pixels)\n) -> (i32, i32, u32) {\n    let mut best_sad = u32::MAX;\n    let mut best_dx = 0;\n    let mut best_dy = 0;\n\n    // 1. Iterate through search candidates (The \"Motion Vector\" candidates)\n    for dy in -range..=range {\n        for dx in -range..=range {\n            \n            let mut sad: u32 = 0;\n\n            // 2. Iterate through the 8x8 Block (The \"Texture Matcher\")\n            // We compare a 8x8 patch centered at (cx, cy) in 'prev'\n            // to a 8x8 patch centered at (cx+dx, cy+dy) in 'current'\n            for by in 0..8 {\n                // Optimization: Pre-calculate row pointers\n                let p_row_y = cy + by - 4;\n                let c_row_y = (cy as i32 + dy + by as i32 - 4) as usize;\n                \n                let p_row_offset = p_row_y * width * 3; // stride * 3 channels\n                let c_row_offset = c_row_y * width * 3;\n\n                for bx in 0..8 {\n                    let p_x = cx + bx - 4;\n                    let c_x = (cx as i32 + dx + bx as i32 - 4) as usize;\n\n                    // Sample GREEN channel (index 1)\n                    let p_idx = p_row_offset + p_x * 3 + 1;\n                    let c_idx = c_row_offset + c_x * 3 + 1;\n\n                    let p_val = prev[p_idx] as i32;\n                    let c_val = current[c_idx] as i32;\n\n                    sad += (p_val - c_val).abs() as u32;\n                }\n            }\n\n            // 3. Update Best Match\n            if sad < best_sad {\n                best_sad = sad;\n                best_dx = dx;\n                best_dy = dy;\n            }\n        }\n    }\n\n    (best_dx, best_dy, best_sad)\n}",
+      "skeleton": {
+        "structs": [],
+        "functions": [
+          "calculate_optical_flow",
+          "find_best_block_match"
+        ],
+        "complexity": 9
+      }
+    },
+    {
+      "path": "native/swarm_native/src/vision/camera.rs",
+      "content": "// native/swarm_native/src/vision/camera.rs\n\nuse std::io::Read;\nuse std::process::{Command, Stdio};\nuse std::sync::atomic::Ordering;\nuse std::thread;\nuse std::time::Instant;\n\nuse crate::state::arena::{SwarmState, FRAME_SIZE, FRAME_WIDTH, FRAME_HEIGHT};\nuse crate::vision::math; \n\n// [CORRECT] Taking state by value (SwarmState), not reference or Arc wrapper\npub fn spawn_heartbeat(state: SwarmState, width: u32, height: u32) {\n    // OPTIMIZATION: Removed the redundant .clone() lines here.\n    // Since we move 'state' into the thread below, we can access \n    // state.memory, state.physiology, etc. directly inside the loop.\n\n    thread::spawn(move || {\n        // 1. Ignite FFmpeg\n        let child = Command::new(\"ffmpeg\")\n            .args(&[\n                \"-f\", \"v4l2\", \"-framerate\", \"30\", \"-video_size\", &format!(\"{}x{}\", width, height),\n                \"-i\", \"/dev/video1\", \n                \"-f\", \"rawvideo\", \"-pix_fmt\", \"rgb24\", \"-\"\n            ])\n            .stdout(Stdio::piped())\n            .stderr(Stdio::null())\n            .spawn()\n            .expect(\"Failed to ignite FFmpeg heartbeat\");\n\n        // 2. Health Monitor: Store the child process handle\n        {\n            // [CORRECT] Accessing the new Arc<Mutex<>> defined in arena.rs\n            let mut process_lock = state.child_process.lock().unwrap();\n            *process_lock = Some(child);\n        }\n\n        // 3. Re-acquire stdout for the hot loop\n        let mut stdout = {\n            let mut lock = state.child_process.lock().unwrap();\n            lock.as_mut().unwrap().stdout.take().unwrap()\n        };\n\n        let mut last_time = Instant::now();\n        let mut current_w_idx = 0;\n        let mut local_grid = [0.0f32; 200];\n\n        // Thread-local previous frame buffer (The Evolutionary Step)\n        let mut prev_frame = vec![0u8; FRAME_SIZE];\n\n        // 4. The Iron Lung Loop\n        // [CLEANUP] Access state directly instead of using the old _ref variables\n        while state.running.load(Ordering::Acquire) == 1 {\n            \n            // Triple Buffer Logic\n            let r_idx = state.memory.ready_idx.load(Ordering::Acquire);\n            let next_w_idx = (current_w_idx + 1) % 3;\n            let final_w_idx = if next_w_idx == r_idx { (next_w_idx + 1) % 3 } else { next_w_idx };\n\n            let slot = &state.memory.slots[final_w_idx];\n\n            {\n                let mut data = slot.data.lock().unwrap();\n                \n                if stdout.read_exact(&mut data).is_err() { break; }\n\n                let (dx, dy) = math::calculate_optical_flow(\n                    &data, \n                    &prev_frame, \n                    FRAME_WIDTH, \n                    FRAME_HEIGHT, \n                    &mut local_grid\n                );\n                \n                let dt = last_time.elapsed().as_secs_f32();\n                last_time = Instant::now();\n                \n                // Direct access to physiology\n                let vx = state.physiology.vx.load() * 0.7 + dx * 0.3;\n                let vy = state.physiology.vy.load() * 0.7 + dy * 0.3;\n                \n                state.physiology.vx.store(vx);\n                state.physiology.vy.store(vy);\n                state.physiology.px.store(state.physiology.px.load() + vx * dt);\n                state.physiology.py.store(state.physiology.py.load() + vy * dt);\n\n                if let Ok(mut g) = state.flow_grid.write() {\n                    g.copy_from_slice(&local_grid);\n                }\n                \n                prev_frame.copy_from_slice(&data);\n            }\n\n            state.memory.ready_idx.store(final_w_idx, Ordering::Release);\n            state.memory.write_idx.store(final_w_idx, Ordering::Release);\n            current_w_idx = final_w_idx;\n        }\n    });\n}",
+      "skeleton": {
+        "structs": [],
+        "functions": [
+          "spawn_heartbeat"
+        ],
+        "complexity": 3
+      }
+    },
+    {
+      "path": "native/swarm_native/src/vision/mod.rs",
+      "content": "// native/swarm_native/src/vision/mod.rs\n\npub mod camera;   // The FFmpeg Heartbeat\npub mod math;     // The Optical Flow Logic\npub mod detector; // The Motion Watchdog"
+    },
+    {
+      "path": "native/swarm_native/src/vision/detector.rs",
+      "content": "// native/swarm_native/src/vision/detector.rs\n\n/// THE WATCHDOG (Motion Detection)\n///\n/// This module implements a \"Sparse Pixel Difference\" algorithm.\n/// Unlike the Optical Flow (which runs at 30Hz on the GPU/SIMD path),\n/// this is a lightweight CPU scan intended for \"Wake-on-Motion\" or \n/// security triggers.\n///\n/// Refactored from the original 'detect_change' in lib.rs.\n\n#[derive(Debug, Clone, Copy)]\npub struct MotionROI {\n    pub x: u32,\n    pub y: u32,\n    pub w: u32,\n    pub h: u32,\n}\n\n/// Scans two frame slices for pixel differences.\n/// \n/// # Arguments\n/// * `current` - The active frame buffer (RGB24).\n/// * `reference` - The background or previous frame to compare against.\n/// * `width` - Frame width (640).\n/// * `height` - Frame height (480).\n/// * `step` - Scan density (e.g., 10 = check every 10th pixel).\n///\n/// # Returns\n/// * `Some(MotionROI)` if changes exceed the threshold.\n/// * `None` if the scene is stable.\npub fn calculate_motion_bbox(\n    current: &[u8], \n    reference: &[u8], \n    width: usize, \n    _height: usize, \n    step: usize\n) -> Option<MotionROI> {\n    \n    // Safety check: Buffer sizes must match\n    if current.len() != reference.len() {\n        return None;\n    }\n\n    let mut diff_count = 0;\n    \n    // Bounding box accumulators (inverted init)\n    let mut min_x = width;\n    let mut max_x = 0;\n    let mut min_y = usize::MAX; // temporary use usize for logic\n    let mut max_y = 0;\n\n    // We step by (step * 3) to jump pixels while respecting RGB stride\n    let stride = step * 3;\n    let limit = current.len();\n\n    // The Scan Loop\n    // We start at 0 (or 1 in original) and jump by 'stride'\n    for i in (0..limit).step_by(stride) {\n        // Fast path: Direct integer comparison\n        let val_c = current[i] as i32;\n        let val_ref = reference[i] as i32;\n\n        // Threshold hardcoded to 30 (approx 12% brightness change)\n        if (val_c - val_ref).abs() > 30 {\n            diff_count += 1;\n\n            let pixel_idx = i / 3;\n            let x = pixel_idx % width;\n            let y = pixel_idx / width;\n\n            if x < min_x { min_x = x; }\n            if x > max_x { max_x = x; }\n            if y < min_y { min_y = y; }\n            if y > max_y { max_y = y; }\n        }\n    }\n\n    // \"Sensitivity\" Threshold: 50 changed points required to trigger\n    if diff_count > 50 {\n        let w = if max_x > min_x { max_x - min_x } else { 0 };\n        let h = if max_y > min_y { max_y - min_y } else { 0 };\n\n        Some(MotionROI {\n            x: min_x as u32,\n            y: min_y as u32,\n            w: w as u32,\n            h: h as u32,\n        })\n    } else {\n        None\n    }\n}",
+      "skeleton": {
+        "structs": [
+          "MotionROI"
+        ],
+        "functions": [
+          "calculate_motion_bbox"
+        ],
+        "complexity": 10
       }
     },
     {
@@ -1053,7 +1174,7 @@
     },
     {
       "path": "Mnesia.brain@192.168.1.147/DECISION_TAB.LOG",
-      "content": "\u0001\u0002\u0003\u0004cXM\u000b\u0000\u0000\u0000RbWLAh\u0006w\nlog_headerw\fdecision_tabk\u0000\u00031.0k\u0000\u00064.23.5w\u0013brain@192.168.1.147h\u0003b\u0000\u0000\u0006b\u0000\u0003h2b\u0000\u0007\u0000\u0000\u0000ibWLAh\u0002w\ndecision_listl\u0000\u0000\u0000\u0002h\u0004w\u000bmnesia_downw\u0013brain@192.168.1.243h\u0003b\u0000\u0000\u0007a\u0001a\th\u0003a\u0004a\ta3h\u0003w\ttrans_tidw\u0006serialb\u0000\u0000\u0004j"
+      "content": "\u0001\u0002\u0003\u0004cXM\u000b\u0000\u0000\u0000RbWLAh\u0006w\nlog_headerw\fdecision_tabk\u0000\u00031.0k\u0000\u00064.23.5w\u0013brain@192.168.1.147h\u0003b\u0000\u0000\u0006b\u0000\u0000\n?b\u0000\u0007T\u0000\u0000\u0000ibWLAh\u0002w\ndecision_listl\u0000\u0000\u0000\u0002h\u0004w\u000bmnesia_downw\u0013brain@192.168.1.243h\u0003b\u0000\u0000\u0007a\u0001a\th\u0003a\u0004a\ta3h\u0003w\ttrans_tidw\u0006serialb\u0000\u0000\u0004j"
     },
     {
       "path": "Mnesia.brain@192.168.1.147/schema.DAT",
@@ -1065,11 +1186,11 @@
     },
     {
       "path": "Mnesia.brain@192.168.1.147/LATEST.LOG",
-      "content": "\u0001\u0002\u0003\u0004\u0006\u0007\b\t\u0000\u0000\u0000ObWLAh\u0006w\nlog_headerw\ttrans_logk\u0000\u00034.3k\u0000\u00064.23.5w\u0013brain@192.168.1.147h\u0003b\u0000\u0000\u0006b\u0000\u0003h2b\u0000\f\\"
+      "content": "\u0001\u0002\u0003\u0004\u0006\u0007\b\t\u0000\u0000\u0000ObWLAh\u0006w\nlog_headerw\ttrans_logk\u0000\u00034.3k\u0000\u00064.23.5w\u0013brain@192.168.1.147h\u0003b\u0000\u0000\u0006b\u0000\u0000\n?b\u0000\f"
     },
     {
       "path": "lib/swarm_brain/blackboard.ex",
-      "content": "defmodule SwarmBrain.Blackboard do\n  @moduledoc \"The Distributed Hive Mind.\"\n  use GenServer\n  require Logger\n\n  @sync_interval 50\n\n  # [RESTORED] Full Cognitive State Preservation\n  defstruct [\n    :crdt,\n    target_class: \"none\",\n    target_position: nil,\n    mission_status: :search,\n    swarm_census: 0\n  ]\n\n  def start_link(_opts), do: GenServer.start_link(__MODULE__, [], name: __MODULE__)\n\n  def init(_) do\n    Logger.info(\"\ud83d\udce1 Blackboard: Initializing Hive Connectivity...\")\n    # [CLEANUP] ETS table creation removed (Moved to Fusion).\n\n    {:ok, crdt_pid} = DeltaCrdt.start_link(DeltaCrdt.AWLWWMap, sync_interval: @sync_interval)\n    :net_kernel.monitor_nodes(true)\n    update_neighbors(crdt_pid)\n\n    # Initial state with full struct\n    {:ok, %__MODULE__{crdt: crdt_pid}}\n  end\n\n  def update_vision(detections, _meta) do\n    GenServer.cast(__MODULE__, {:update_local_vision, detections})\n  end\n\n  def handle_cast({:update_local_vision, detections}, state) do\n    # 1. Hive Sync (Low Bandwidth - DeltaCRDT)\n    best = List.first(detections) || %{label: \"none\"}\n    DeltaCrdt.put(state.crdt, :vision_summary, %{node: Node.self(), label: best[:label]})\n\n    # 2. Local Reflex (High Bandwidth)\n    # [RESTORED] We send the message to the Fusion Process (Tube Amp style)\n    send(SwarmBrain.Sensor.Fusion, {:visual_contact, detections})\n\n    {:noreply, state}\n  end\n\n  # --- NEIGHBOR LOGIC (PRESERVED) ---\n  defp update_neighbors(crdt_pid) do\n    neighbors = Node.list()\n    DeltaCrdt.set_neighbours(crdt_pid, MapSet.new(neighbors))\n  end\n  def handle_info({:nodeup, _}, s), do: {update_neighbors(s.crdt), s} |> elem(1) |> (&{:noreply, &1}).()\n  def handle_info({:nodedown, _}, s), do: {update_neighbors(s.crdt), s} |> elem(1) |> (&{:noreply, &1}).()\nend\n",
+      "content": "defmodule SwarmBrain.Blackboard do\n  @moduledoc \"The Distributed Hive Mind.\"\n  use GenServer\n  require Logger\n\n  @sync_interval 50\n\n  defstruct [\n    :crdt,\n    target_class: \"none\",\n    target_position: nil,\n    mission_status: :search,\n    swarm_census: 0\n  ]\n\n  def start_link(_opts), do: GenServer.start_link(__MODULE__, [], name: __MODULE__)\n\n  def init(_) do\n    Logger.info(\"\ud83d\udce1 Blackboard: Initializing Hive Connectivity...\")\n\n    # 1. Start CRDT\n    {:ok, crdt_pid} = DeltaCrdt.start_link(DeltaCrdt.AWLWWMap, sync_interval: @sync_interval)\n\n    # 2. Monitor Nodes\n    :net_kernel.monitor_nodes(true)\n    update_neighbors(crdt_pid)\n\n    # 3. Return PROPER Struct\n    {:ok, %__MODULE__{crdt: crdt_pid}}\n  end\n\n  # --- API ---\n\n  def update_vision(detections, _meta) do\n    GenServer.cast(__MODULE__, {:update_local_vision, detections})\n  end\n\n  # --- CALLBACKS ---\n\n  def handle_cast({:update_local_vision, detections}, state) do\n    # 1. Hive Sync\n    best = List.first(detections) || %{label: \"none\"}\n    DeltaCrdt.put(state.crdt, :vision_summary, %{node: Node.self(), label: best[:label]})\n\n    # 2. Local Reflex\n    send(SwarmBrain.Sensor.Fusion, {:visual_contact, detections})\n\n    {:noreply, state}\n  end\n\n  # Handle Node Join/Leave events from :net_kernel\n  def handle_info({:nodeup, _node}, state) do\n    update_neighbors(state.crdt)\n    {:noreply, state}\n  end\n\n  def handle_info({:nodedown, _node}, state) do\n    update_neighbors(state.crdt)\n    {:noreply, state}\n  end\n\n  # --- PRIVATE ---\n\n  defp update_neighbors(crdt_pid) do\n    # [FIX] DeltaCrdt requires a LIST, not a MapSet.\n    # We explicitly convert Node.list() (which is a list) just to be safe,\n    # but more importantly, we ensure we don't pass a MapSet if we were doing set math.\n    neighbors = Node.list()\n\n    Logger.debug(\"\ud83d\udce1 Blackboard: Syncing with neighbors: #{inspect(neighbors)}\")\n    DeltaCrdt.set_neighbours(crdt_pid, neighbors)\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Blackboard"
@@ -1089,14 +1210,14 @@
           "GenServer",
           "Logger",
           "Server.ca",
-          "Set.ne",
           "e.li",
           "e.se",
+          "ger.de",
+          "rdt.set_n",
           "rmBrain.Sensor.Fusion, {",
           "t.fi",
           "taCrdt.AWLWWMap, s",
           "taCrdt.pu",
-          "taCrdt.se",
           "taCrdt.st"
         ],
         "complexity": 7,
@@ -1490,7 +1611,7 @@
     },
     {
       "path": "lib/swarm_brain/tracker.ex",
-      "content": "defmodule SwarmBrain.Tracker do\n  use GenServer\n  require Logger\n  # [NEW] Added Proprioception to aliases\n  alias SwarmBrain.{Actor.Network, Sensor.Fusion, Sensor.Proprioception, Vision.Server}\n\n  @interval 33\n\n  def start_link(_opts), do: GenServer.start_link(__MODULE__, [], name: __MODULE__)\n\n  def init(_) do\n    Logger.info(\"\ud83e\udde0 Tracker: RL Pilot Engaging...\")\n    params = Network.init_random_params()\n    schedule_loop()\n    {:ok, %{policy: params, tick: 0}}\n  end\n\n  def handle_info(:control_loop, state) do\n    # 1. Check if System is Online\n    if Server.get_resource() do\n      # A. PROPRIOCEPTION (Rust Physics - 4 inputs)\n      physics_state = Proprioception.get_kinematics()\n\n      # B. FUSION (Visual Target)\n      _target = Fusion.get_visual_target()\n\n      # C. FLOW (REAL DATA - 200 inputs)\n      # [UPDATED] We now fetch the 10x10 vector grid from Rust\n      flow_grid = Proprioception.get_optical_flow()\n\n      # D. INTENT (3 inputs)\n      intent = Nx.tensor([1.0, 0.0, 0.0], type: :f32)\n\n      # Inference\n      # [NOTE] Ensure flow_grid is flat. Nx.from_binary is flat by default.\n      input = Nx.concatenate([physics_state, flow_grid, intent]) |> Nx.new_axis(0)\n      action = Network.predict(state.policy, input)\n\n      if rem(state.tick, 30) == 0 do\n        Logger.debug(\"\ud83e\udde0 Pilot: #{inspect(Nx.to_flat_list(action), charlists: :as_lists)}\")\n      end\n    end\n\n    schedule_loop()\n    {:noreply, %{state | tick: state.tick + 1}}\n  end\n\n  defp schedule_loop, do: Process.send_after(self(), :control_loop, @interval)\nend\n",
+      "content": "defmodule SwarmBrain.Tracker do\n  use GenServer\n  require Logger\n  alias SwarmBrain.{Actor.Network, Sensor.Fusion, Sensor.Proprioception, Vision.Server}\n\n  @interval 33\n\n  def start_link(_opts), do: GenServer.start_link(__MODULE__, [], name: __MODULE__)\n\n  def init(_) do\n    Logger.info(\"\ud83e\udde0 Tracker: RL Pilot Engaging...\")\n    # Use the new Axon struct if possible, or suppress warning if just a map\n    params = Network.init_random_params()\n    schedule_loop()\n    {:ok, %{policy: params, tick: 0}}\n  end\n\n  def handle_info(:control_loop, state) do\n    if Server.get_resource() do\n\n      # --- A. PROPRIOCEPTION (The Fix) ---\n      # Rust returns a Tuple: {vx, vy, px, py}\n      # We MUST unpack it and wrap it in a List [] for Nx.tensor\n      {vx, vy, px, py} = Proprioception.get_kinematics()\n      physics_state = Nx.tensor([vx, vy, px, py], type: :f32)\n\n      # --- B. FUSION ---\n      _target = Fusion.get_visual_target()\n\n      # --- C. FLOW (Optical Flow Grid) ---\n      # This IS a binary from Rust, so Nx.from_binary is correct here.\n      flow_raw = Proprioception.get_optical_flow()\n\n      flow_grid = case flow_raw do\n        %Nx.Tensor{} -> flow_raw\n        bin when is_binary(bin) -> Nx.from_binary(bin, :f32)\n        _ -> Nx.broadcast(0.0, {200}) # Fallback safety\n      end\n\n      # --- D. INTENT ---\n      intent = Nx.tensor([1.0, 0.0, 0.0], type: :f32)\n\n      # --- INFERENCE ---\n      # Concatenate: Physics (4) + Flow (200) + Intent (3) = 207 Inputs\n      # We flatten flow_grid just in case shape is weird\n      input = Nx.concatenate([\n        physics_state,\n        Nx.flatten(flow_grid),\n        intent\n      ])\n      |> Nx.new_axis(0) # Batch size of 1\n\n      _action = Network.predict(state.policy, input)\n\n      # Logger.debug(\"\ud83e\udde0 Tracker: Tick #{state.tick} | Px: #{px}\")\n\n      schedule_loop()\n      {:noreply, %{state | tick: state.tick + 1}}\n    else\n      # Iron Lung not ready yet\n      schedule_loop()\n      {:noreply, state}\n    end\n  end\n\n  defp schedule_loop, do: Process.send_after(self(), :control_loop, @interval)\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Tracker"
@@ -1509,10 +1630,12 @@
           "Sensor.Fusion",
           "Sensor.Proprioception",
           "SwarmBrain",
+          "Tensor{}",
           "Vision.Server",
+          "br",
           "co",
           "fl",
-          "ger.de",
+          "fr",
           "ion.ge",
           "ne",
           "prioception.ge",
@@ -1618,7 +1741,7 @@
     },
     {
       "path": "lib/swarm_brain/actor/network.ex",
-      "content": "defmodule SwarmBrain.Actor.Network do\n  @moduledoc \"The RL Policy Network definition.\"\n\n # [CRITICAL UPDATE]\n  # 4 (Fused) + 200 (Optical Flow) + 3 (Intent) = 207\n  @input_size 207\n  @output_size 4\n\n  def build_model do\n    Axon.input(\"state\", shape: {nil, @input_size})\n    |> Axon.dense(128, activation: :tanh) # Increased neurons for complex flow data\n    |> Axon.dense(64, activation: :tanh)\n    |> Axon.dense(@output_size, activation: :tanh)\n  end\n\n  def init_random_params do\n    model = build_model()\n    # Template: {BatchSize, Features}\n    template = Nx.template({1, @input_size}, :f32)\n\n    # [FIX] ARITY TRAP SOLVED\n    # We pass %{} as the 3rd arg (initial_params).\n    # This forces [compiler: EXLA] into the 4th arg (options).\n    Axon.init(model, template, %{}, compiler: EXLA)\n  end\n\n  def predict(model_state, input) do\n    model = build_model()\n\n    # Axon.predict signature: (model, model_state, input, opts)\n    # Here, [compiler: EXLA] correctly lands in the 4th slot because\n    # input is clearly the 3rd arg.\n    Axon.predict(model, model_state, input, compiler: EXLA)\n  end\nend\n",
+      "content": "defmodule SwarmBrain.Actor.Network do\n  @moduledoc \"The RL Policy Network definition.\"\n\n  # 4 (Fused) + 200 (Optical Flow) + 3 (Intent) = 207\n  @input_size 207\n  @output_size 4\n\n  def build_model do\n    Axon.input(\"state\", shape: {nil, @input_size})\n    |> Axon.dense(128, activation: :tanh)\n    |> Axon.dense(64, activation: :tanh)\n    |> Axon.dense(@output_size, activation: :tanh)\n  end\n\n  # [FIXED] Replaced deprecated Axon.init/4 with Axon.build/2 pattern\n  def init_random_params do\n    model = build_model()\n    # Template: {BatchSize, Features}\n    template = Nx.template({1, @input_size}, :f32)\n\n    # Axon.build returns {init_fn, predict_fn}\n    {init_fn, _} = Axon.build(model, compiler: EXLA)\n\n    # Initialize with default state\n    init_fn.(template, %{})\n  end\n\n  def predict(model_state, input) do\n    model = build_model()\n    # Using EXLA compiler for inference\n    Axon.predict(model, model_state, input, compiler: EXLA)\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Actor.Network"
@@ -1846,7 +1969,7 @@
     },
     {
       "path": "lib/swarm_brain/sensor/proprioception.ex",
-      "content": "defmodule SwarmBrain.Sensor.Proprioception do\n  @moduledoc \"\"\"\n  The Fast-Twitch Muscle Fibers.\n  Decouples physics (Proprioception) from high-level perception (Fusion).\n  \"\"\"\n  alias SwarmBrain.Vision.{Server, Native}\n  import Nx.Defn\n\n  # --- ZERO-LATENCY READ (Kinematics) ---\n  def get_kinematics do\n    resource = Server.get_resource()\n\n    if resource do\n      bin = Native.get_fused_state(resource)\n      Nx.from_binary(bin, :f32)\n    else\n      Nx.tensor([0.0, 0.0, 0.0, 0.0], type: :f32)\n    end\n  end\n\n  # --- ZERO-LATENCY READ (Optical Flow Grid) ---\n  # Returns a tensor of shape {200} representing the 10x10 grid (dx, dy)\n  def get_optical_flow do\n    resource = Server.get_resource()\n\n    if resource do\n      # Fetch 800 bytes (200 floats)\n      case Native.get_flow_grid(resource) do\n        bin when is_binary(bin) ->\n          Nx.from_binary(bin, :f32)\n        _ ->\n          Nx.broadcast(0.0, {200}) |> Nx.as_type(:f32)\n      end\n    else\n      Nx.broadcast(0.0, {200}) |> Nx.as_type(:f32)\n    end\n  end\nend\n",
+      "content": "defmodule SwarmBrain.Sensor.Proprioception do\n  @moduledoc \"\"\"\n  The Fast-Twitch Muscle Fibers.\n  Decouples physics (Proprioception) from high-level perception (Fusion).\n  \"\"\"\n  alias SwarmBrain.Vision.{Server, Native}\n\n  # --- ZERO-LATENCY READ (Kinematics) ---\n  def get_kinematics do\n    resource = Server.get_resource()\n\n    if resource do\n      bin = Native.get_fused_state(resource)\n      Nx.from_binary(bin, :f32)\n    else\n      Nx.tensor([0.0, 0.0, 0.0, 0.0], type: :f32)\n    end\n  end\n\n  # --- ZERO-LATENCY READ (Optical Flow Grid) ---\n  # Returns a tensor of shape {200} representing the 10x10 grid (dx, dy)\n  def get_optical_flow do\n    resource = Server.get_resource()\n\n    if resource do\n      # Fetch 800 bytes (200 floats)\n      case Native.get_flow_grid(resource) do\n        bin when is_binary(bin) ->\n          Nx.from_binary(bin, :f32)\n        _ ->\n          Nx.broadcast(0.0, {200}) |> Nx.as_type(:f32)\n      end\n    else\n      Nx.broadcast(0.0, {200}) |> Nx.as_type(:f32)\n    end\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Sensor.Proprioception"
@@ -1859,7 +1982,6 @@
         "dependencies": [
           "Native",
           "Nx",
-          "Nx.Defn",
           "Server",
           "SwarmBrain.Vision"
         ],
@@ -1893,30 +2015,36 @@
     },
     {
       "path": "lib/swarm_brain/vision/native.ex",
-      "content": "defmodule SwarmBrain.Vision.Native do\n  @moduledoc \"\"\"\n  The Iron Lung Interface.\n  \"\"\"\n  use Rustler, otp_app: :swarm_brain, crate: \"swarm_native\"\n\n  # --- 1. LIFECYCLE ---\n  def init_state, do: error()\n\n  # Starts the camera thread. Returns :ok.\n  # Note: The thread is attached to the Resource, not the PID.\n  def start_camera(_resource, _width, _height), do: error()\n\n  # --- 2. SENSORS (ATOMIC) ---\n\n  # Returns the raw RGB binary for YOLO\n  def get_latest_frame(_resource), do: error()\n\n  # Returns the struct [px, py, vx, vy] as binary (16 bytes)\n  def get_fused_state(_resource), do: error()\n\n  # [NEW]\n  def get_flow_grid(_resource), do: error()\n\n  defp error, do: :erlang.nif_error(:nif_not_loaded)\nend\n",
+      "content": "defmodule SwarmBrain.Vision.Native do\n  @moduledoc \"\"\"\n  The Iron Lung Interface.\n  Acts as the bridge to the Rust 'swarm_native' crate.\n  \"\"\"\n  use Rustler, otp_app: :swarm_brain, crate: \"swarm_native\"\n\n  # --- 1. LIFECYCLE ---\n  def init_state, do: error()\n\n  # Arity 3: width, height, threshold\n  def init_retina(_width, _height, _threshold), do: error()\n\n  # Arity 3: resource, width, height\n  def start_camera(_resource, _width, _height), do: error()\n\n  # [NEW] The Watchdog Probe\n  def check_health(_resource), do: error()\n\n  # --- 2. SENSORS (ATOMIC) ---\n\n  def get_latest_frame(_resource), do: error()\n  def get_fused_state(_resource), do: error()\n  def get_flow_grid(_resource), do: error()\n\n  # --- 3. LOGIC (RETINA) ---\n\n  # Arity 2: resource, frame_binary\n  def detect_change(_resource), do: error()\n\n  # --- 4. LEGACY STUBS (FIXED) ---\n\n  # [FIX] Removed _env. Arity is now 4 (id, x, y, h).\n  def update_spatial_state(_resource, _x, _y, _status), do: error()\n\n  # [FIX] Removed _env. Arity is now 1 (id).\n  def get_spatial_state(_resource, _x, _y), do: error()\n\n  # [FIX] Removed _env. Arity is now 0.\n  def setup_queryable(), do: error()\n\n  defp error, do: :erlang.nif_error(:nif_not_loaded)\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Vision.Native"
         ],
         "functions": [
+          "check_health/1",
+          "detect_change/1",
           "error/0",
           "get_flow_grid/1",
           "get_fused_state/1",
           "get_latest_frame/1",
+          "get_spatial_state/3",
+          "init_retina/3",
           "init_state/0",
-          "start_camera/3"
+          "setup_queryable/0",
+          "start_camera/3",
+          "update_spatial_state/4"
         ],
         "structs": [],
         "dependencies": [
           "Rustler"
         ],
-        "complexity": 6,
+        "complexity": 12,
         "doc": null
       }
     },
     {
       "path": "lib/swarm_brain/vision/retina.ex",
-      "content": "defmodule SwarmBrain.Vision.Retina do\n  use GenServer\n  require Logger\n  alias SwarmBrain.Vision.Native\n  alias SwarmBrain.Cortex\n\n  # Resolution Configuration\n  @width 640\n  @height 480\n\n  # Sensitivity (Higher = less sensitive to small movements)\n  @sad_threshold 500_000\n\n  # Keyframe Sync: Every 60 frames (approx 2s at 30fps)\n  @keyframe_tick 60\n\n  def start_link(opts \\\\ []) do\n    GenServer.start_link(__MODULE__, opts, name: __MODULE__)\n  end\n\n  @impl true\n  def init(_opts) do\n    Logger.info(\"\ud83d\udc41 Retina: Online. Initializing Rust Gatekeeper.\")\n\n    # Initialize the Rust NIF Resource\n    {:ok, resource} = Native.init_retina(@width, @height, @sad_threshold)\n\n    {:ok, %{\n      resource: resource,\n      frame_count: 0\n    }}\n  end\n\n  # This function is called by your Camera/Sensor loop\n  def process_frame(frame_binary) do\n    GenServer.cast(__MODULE__, {:frame, frame_binary})\n  end\n\n  @impl true\n  def handle_cast({:frame, frame_bin}, state) do\n    # 1. Keyframe Sync Logic\n    is_keyframe = rem(state.frame_count, @keyframe_tick) == 0\n\n    if is_keyframe do\n       # SYNC: Force full Cortex analysis to correct temporal drift\n       # Logger.debug(\"\ud83d\udc41 Retina: Keyframe Sync\")\n       trigger_full_inference(frame_bin)\n       {:noreply, %{state | frame_count: state.frame_count + 1}}\n    else\n       # 2. GATED PERCEPTION (Rust NIF)\n       case Native.detect_change(state.resource, frame_bin) do\n         :no_change ->\n            # Silence... efficient silence.\n            {:noreply, %{state | frame_count: state.frame_count + 1}}\n\n         {:change, {x, y, w, h}} ->\n            # 3. ROI CROP (Evolutionary Efficiency)\n            # Logger.debug(\"\ud83d\udc41 Retina: Movement detected at {#{x}, #{y}}\")\n\n            # Using Evision (OpenCV) as requested for fast slicing\n            # We assume frame_bin is raw grayscale u8\n            frame_bin\n            |> Evision.Mat.from_binary(@height, @width, :u8, 1)\n            |> Evision.Mat.roi({x, y, w, h})\n            # Convert ROI back to Tensor for the Brain\n            |> to_nx_tensor()\n            |> Cortex.analyze()\n\n            {:noreply, %{state | frame_count: state.frame_count + 1}}\n       end\n    end\n  end\n\n  # Helper to bridge Evision Mat -> Nx Tensor\n  defp to_nx_tensor(evision_mat) do\n    binary_data = Evision.Mat.to_binary(evision_mat)\n    {h, w, _c} = Evision.Mat.shape(evision_mat)\n\n    binary_data\n    |> Nx.from_binary(:u8)\n    |> Nx.reshape({h, w, 1})\n  end\n\n  defp trigger_full_inference(bin) do\n    bin\n    |> Nx.from_binary(:u8)\n    |> Nx.reshape({@height, @width, 1})\n    |> Cortex.analyze()\n  end\nend\n",
+      "content": "  defmodule SwarmBrain.Vision.Retina do\n  use GenServer\n  require Logger\n  alias SwarmBrain.Vision.Native\n  alias SwarmBrain.Vision.Server\n  alias SwarmBrain.Cortex\n\n# Resolution Configuration\n  # We read the config block defined in config.exs under :swarm_brain, :vision\n  # No default provided. If config.exs is broken, this returns nil or raises an error depending on strictness.\n  @vision_config Application.compile_env!(:swarm_brain, :vision)\n  @width @vision_config[:width]\n  @height @vision_config[:height]\n\n  # Keyframe Sync: Every 60 frames (approx 2s at 30fps)\n  @keyframe_tick 60\n\n  def start_link(opts \\\\ []) do\n    GenServer.start_link(__MODULE__, opts, name: __MODULE__)\n  end\n\n  @impl true\n  def init(_opts) do\n    Logger.info(\"\ud83d\udc41 Retina: Online. Linking to Iron Lung...\")\n\n    # [FIX 1] Lazy Initialization\n    # We do not call Native.init_retina(). We wait to grab the shared\n    # resource from the Server's persistent_term.\n    {:ok, %{\n      resource: nil,\n      frame_count: 0\n    }}\n  end\n\n  # This function is called by your Camera/Sensor loop\n  def process_frame(frame_binary) do\n    GenServer.cast(__MODULE__, {:frame, frame_binary})\n  end\n\n  @impl true\n  def handle_cast({:frame, frame_bin}, state) do\n    # 1. Lazy Resource Fetch\n    resource = state.resource || Server.get_resource()\n\n    if is_nil(resource) do\n      # If the Iron Lung isn't ready, we can't see. Drop frame.\n      {:noreply, state}\n    else\n      # 2. Keyframe Sync Logic\n      is_keyframe = rem(state.frame_count, @keyframe_tick) == 0\n\n      if is_keyframe do\n         # SYNC: Force full Cortex analysis to correct temporal drift\n         trigger_full_inference(frame_bin)\n         {:noreply, %{state | resource: resource, frame_count: state.frame_count + 1}}\n      else\n         # 3. GATED PERCEPTION (Rust NIF)\n         # [FIX 2] Arity 1: Rust checks its internal Triple Buffer.\n         # [FIX 3] Return Type: We get a raw tuple, not a tagged atom.\n         case Native.detect_change(resource) do\n           {0, 0, 0, 0} ->\n              # Silence... efficient silence.\n              {:noreply, %{state | resource: resource, frame_count: state.frame_count + 1}}\n\n           {x, y, w, h} ->\n              # 4. ROI CROP\n              # Logger.debug(\"\ud83d\udc41 Retina: Movement detected at {#{x}, #{y}}\")\n\n              # We use the 'frame_bin' passed in for the crop source\n              frame_bin\n              |> Evision.Mat.from_binary(@height, @width, :u8, 1)\n              |> Evision.Mat.roi({x, y, w, h})\n              |> to_nx_tensor()\n              |> Cortex.analyze()\n\n              {:noreply, %{state | resource: resource, frame_count: state.frame_count + 1}}\n         end\n      end\n    end\n  end\n\n  # Helper to bridge Evision Mat -> Nx Tensor\n  defp to_nx_tensor(evision_mat) do\n    binary_data = Evision.Mat.to_binary(evision_mat)\n    {h, w, _c} = Evision.Mat.shape(evision_mat)\n\n    # Assuming YOLO expects RGB, but Evision might be grayscale here.\n    # Adjust channels if necessary.\n    Nx.from_binary(binary_data, :u8)\n    |> Nx.reshape({h, w, 1})\n  end\n\n  defp trigger_full_inference(frame_bin) do\n    # Convert full frame to Tensor and fire\n    Nx.from_binary(frame_bin, :u8)\n    |> Nx.reshape({@height, @width, 3}) # Assuming RGB input\n    |> Cortex.analyze()\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Vision.Retina"
@@ -1925,28 +2053,30 @@
           "cess_frame(fr/1",
           "dle_cast({:/2",
           "init/1",
-          "sor(evision_/1",
+          "r_full_inference(frame/1",
           "start_link/1",
-          "ull_inference(bin) do\n/1"
+          "tensor(evisi/1"
         ],
         "structs": [],
         "dependencies": [
-          ".detec",
+          ".analy",
+          "Application",
           "GenServer",
           "Logger",
           "Server.ca",
           "SwarmBrain.Cortex",
           "SwarmBrain.Vision.Native",
-          "alyze(",
-          "at.from_bin",
-          "at.roi({x,",
-          "at.shape(ev",
-          "at.to_binar",
-          "e(",
-          "in",
-          "ive.in"
+          "SwarmBrain.Vision.Server",
+          "ha",
+          "ive.de",
+          "m_",
+          "n.Mat.from_",
+          "n.Mat.roi({",
+          "n.Mat.shape",
+          "n.Mat.to_bi",
+          "ver.ge"
         ],
-        "complexity": 8,
+        "complexity": 9,
         "doc": null
       }
     },
@@ -1984,25 +2114,26 @@
     },
     {
       "path": "lib/swarm_brain/vision/server.ex",
-      "content": "defmodule SwarmBrain.Vision.Server do\n  @moduledoc \"\"\"\n  The Heart of the Vision System.\n  It owns the Rust Resource but shares it via :persistent_term for zero-latency access.\n  \"\"\"\n  use GenServer\n  require Logger\n  alias SwarmBrain.Vision.{Native, SharedBuffer}\n  alias SwarmBrain.Cortex.Yolo\n\n  # The Global Key for the Rust Handle\n  @resource_key :swarm_vision_resource\n  @tick_interval 33\n\n  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)\n\n  # --- PUBLIC API (The Zero-Latency Lookup) ---\n  def get_resource do\n    :persistent_term.get(@resource_key, nil)\n  end\n\n  @impl true\n  def init(_opts) do\n    config = Application.get_env(:swarm_brain, :vision, [width: 640, height: 480])\n    width = config[:width]\n    height = config[:height]\n\n    Logger.info(\"\ud83d\udc41\ufe0f Vision.Server: Booting Iron Lung...\")\n\n    # 1. ALLOCATE MEMORY (Rust Side)\n    resource = Native.init_state()\n\n    # 2. SHARE THE KEY (The Handover)\n    :persistent_term.put(@resource_key, resource)\n\n    # 3. IGNITE CAMERA\n    # Note: User confirmed /dev/video1 is the target\n    case Native.start_camera(resource, width, height) do\n      :ok ->\n        Logger.info(\"\ud83d\udc41\ufe0f Vision.Server: Camera Online.\")\n        schedule_tick()\n        {:ok, %{resource: resource, active_inferences: 0, max_concurrency: 1}}\n\n      error ->\n        Logger.error(\"\u274c Failed to start camera: #{inspect(error)}\")\n        {:stop, error}\n    end\n  end\n\n  @impl true\n  def terminate(_reason, _state) do\n    :persistent_term.erase(@resource_key)\n  end\n\n  # --- THE HEARTBEAT (YOLO SCHEDULING) ---\n  @impl true\n  def handle_info(:tick, state) do\n    if state.active_inferences < state.max_concurrency do\n      case SharedBuffer.get_vision_tensor() do\n        {:ok, tensor} ->\n          async_inference(tensor)\n          schedule_tick()\n          {:noreply, %{state | active_inferences: state.active_inferences + 1}}\n\n        _ ->\n          schedule_tick()\n          {:noreply, state}\n      end\n    else\n      schedule_tick()\n      {:noreply, state}\n    end\n  end\n\n  def handle_info(:inference_complete, state) do\n    {:noreply, %{state | active_inferences: max(0, state.active_inferences - 1)}}\n  end\n\n  defp async_inference(tensor) do\n    parent = self()\n    Task.Supervisor.start_child(SwarmBrain.Cortex.Supervisor, fn ->\n      results = Yolo.analyze(tensor)\n      SwarmBrain.Blackboard.update_vision([results], %{source: :webcam})\n      send(parent, :inference_complete)\n    end)\n  end\n\n  # [FIX] This was missing!\n  defp schedule_tick, do: Process.send_after(self(), :tick, @tick_interval)\nend\n",
+      "content": "defmodule SwarmBrain.Vision.Server do\n  @moduledoc \"\"\"\n  The Cerebellum of the Vision System.\n  Now equipped with a Self-Healing Watchdog (Auto-Bias).\n  \"\"\"\n  use GenServer\n  require Logger\n  alias SwarmBrain.Vision.{Native, SharedBuffer}\n  alias SwarmBrain.Cortex.Yolo\n\n  @resource_key :swarm_vision_resource\n  @tick_interval 33 # ~30 FPS\n  @health_check_interval 30 # Check every 30 ticks (~1 second)\n\n  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)\n\n  def get_resource, do: :persistent_term.get(@resource_key, nil)\n\n  @impl true\n  def init(_opts) do\n    config = Application.get_env(:swarm_brain, :vision, [width: 640, height: 480])\n    width = config[:width]\n    height = config[:height]\n\n    Logger.info(\"\ud83d\udc41\ufe0f Vision.Server: Ignition. Booting Iron Lung...\")\n\n    # 1. ALLOCATE ARENA (Rust)\n    resource = Native.init_state()\n    :persistent_term.put(@resource_key, resource)\n\n    # 2. START HEARTBEAT\n    case Native.start_camera(resource, width, height) do\n      :ok ->\n        Logger.info(\"\ud83d\udc41\ufe0f Vision.Server: Heartbeat Active.\")\n        schedule_tick()\n        {:ok, %{\n          resource: resource,\n          active_inferences: 0,\n          max_concurrency: 1,\n          tick_count: 0\n        }}\n\n      error ->\n        Logger.error(\"\u274c Vision.Server: Primary Ignition Failed: #{inspect(error)}\")\n        {:stop, :camera_ignition_failure}\n    end\n  end\n\n  # --- THE WATCHDOG LOOP ---\n\n  @impl true\n  def handle_info(:tick, state) do\n    # 1. Perform Health Check every second (~30 ticks)\n    new_tick_count = state.tick_count + 1\n\n    if rem(new_tick_count, @health_check_interval) == 0 do\n      check_physiology!(state.resource)\n    end\n\n    # 2. Process Vision (Backpressure Control)\n    if state.active_inferences < state.max_concurrency do\n      case SharedBuffer.get_vision_tensor() do\n        {:ok, tensor} ->\n          async_inference(tensor)\n          schedule_tick()\n          {:noreply, %{state | active_inferences: state.active_inferences + 1, tick_count: new_tick_count}}\n\n        _ ->\n          schedule_tick()\n          {:noreply, %{state | tick_count: new_tick_count}}\n      end\n    else\n      # System saturated; skip frame\n      schedule_tick()\n      {:noreply, %{state | tick_count: new_tick_count}}\n    end\n  end\n\n  def handle_info(:inference_complete, state) do\n    {:noreply, %{state | active_inferences: max(0, state.active_inferences - 1)}}\n  end\n\n  # --- PRIVATE HELPERS ---\n\n  defp check_physiology!(resource) do\n    # [Point 2: The Watchdog]\n    # We call the Rust NIF to see if the process is alive\n    case Native.check_health(resource) do\n      :ok ->\n        :ok # Pulse detected.\n\n      :error ->\n        Logger.warning(\"\ud83d\udc7b Vision.Server: BRAIN-STEM DEATH DETECTED. Triggering Reset...\")\n        # Trigger Supervisor Restart (Power Cycle)\n        exit(:camera_failure)\n    end\n  end\n\n  defp async_inference(tensor) do\n    parent = self()\n    Task.Supervisor.start_child(SwarmBrain.Cortex.Supervisor, fn ->\n      results = Yolo.analyze(tensor)\n      SwarmBrain.Blackboard.update_vision(results, %{})\n      send(parent, :inference_complete)\n    end)\n  end\n\n  defp schedule_tick, do: Process.send_after(self(), :tick, @tick_interval)\n\n  @impl true\n  def terminate(_reason, _state) do\n    :persistent_term.erase(@resource_key)\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Vision.Server"
         ],
         "functions": [
+          "(tensor) do\n   /1",
           ":inference_/2",
           ":tick, stat/2",
-          "eason, _s/2",
+          "do: Process.s/0",
           "get_resource/0",
           "init/1",
-          "k, do: Proces/0",
-          "nce(tensor) do\n/1",
+          "logy!(resource) d/1",
+          "on, _stat/2",
           "start_link/1"
         ],
         "structs": [],
         "dependencies": [
-          "(ten",
           ".get_vision_",
+          ".start_child(Sw",
           "Application",
           "GenServer",
           "Logger",
@@ -2010,22 +2141,24 @@
           "SharedBuffer",
           "SwarmBrain.Cortex.Yolo",
           "SwarmBrain.Vision",
-          "_after(",
+          "_healt",
           "e.init",
           "e.star",
-          "lackboard.update_visi",
+          "ex.Supervisor, fn ->\n      r",
+          "kboard.update_vision(",
+          "ng(\"\ud83d\udc7b",
+          "nsor",
           "or(\"\u274c",
-          "ortex.Supervisor, fn ->",
           "r.info",
-          "sor.start_child"
+          "ter(sel"
         ],
-        "complexity": 11,
+        "complexity": 14,
         "doc": null
       }
     },
     {
       "path": "lib/swarm_brain/vision/shared_buffer.ex",
-      "content": "defmodule SwarmBrain.Vision.SharedBuffer do\n  @moduledoc \"Interface for Zero-Copy tensor creation with Neuromorphic Gating.\"\n  require Logger\n  alias SwarmBrain.Vision.{Server, Native}\n\n  @config Application.compile_env(:swarm_brain, :vision, [width: 640, height: 480])\n  @width @config[:width]\n  @height @config[:height]\n  @channels 3\n  @expected_size @width * @height * @channels\n\n  def get_vision_tensor(_opts \\\\ []) do\n    # 1. Get Resource Handle\n    resource = Server.get_resource()\n\n    if resource do\n      # 2. Atomic Fetch from Rust\n      case Native.get_latest_frame(resource) do\n        :no_change ->\n          :no_change\n\n        raw_binary when is_binary(raw_binary) ->\n          if byte_size(raw_binary) == @expected_size do\n            # [FIX] Inflate Binary to Tensor\n            # The Cortex expects specific shape {H, W, C}\n            Nx.from_binary(raw_binary, :u8)\n            |> Nx.reshape({@height, @width, @channels})\n            |> then(&{:ok, &1}) # Wrap in success tuple\n          else\n            # Handle startup transient state (empty buffer)\n            if byte_size(raw_binary) == 0 do\n              {:error, :buffer_empty}\n            else\n              Logger.error(\"CRITICAL: Buffer Size Mismatch! Expected #{@expected_size}, Got #{byte_size(raw_binary)}\")\n              {:error, :memory_corruption}\n            end\n          end\n\n        _ ->\n          {:error, :unknown_return}\n      end\n    else\n      {:error, :vision_offline}\n    end\n  end\nend\n",
+      "content": "defmodule SwarmBrain.Vision.SharedBuffer do\n  @moduledoc \"Interface for Zero-Copy tensor creation.\"\n  require Logger\n  alias SwarmBrain.Vision.{Server, Native}\n\n  # Ensure these match native/swarm_native/src/state/arena.rs\n  # We read config at compile time to avoid runtime lookup costs in the hot loop\n  @config Application.compile_env(:swarm_brain, :vision, [width: 640, height: 480])\n  @width @config[:width]\n  @height @config[:height]\n  @channels 3\n  @expected_size @width * @height * @channels\n\n  @doc \"\"\"\n  Fetches the current frame from the Iron Lung and inflates it into an Nx Tensor.\n  Returns {:ok, tensor} or {:error, reason}.\n  \"\"\"\n  def get_vision_tensor(_opts \\\\ []) do\n    resource = Server.get_resource()\n\n    if resource do\n      # 1. Atomic Fetch (Always returns Binary)\n      # The Iron Lung guarantees this is never nil and never empty (pre-allocated).\n      raw_binary = Native.get_latest_frame(resource)\n\n      # 2. Safety Check\n      if byte_size(raw_binary) == @expected_size do\n\n        # 3. Inflate to Tensor\n        # Note: At boot, this may be an all-black tensor (zeros)\n        # We use u8 (0-255) for raw RGB data.\n        Nx.from_binary(raw_binary, :u8)\n        |> Nx.reshape({@height, @width, @channels})\n        |> then(&{:ok, &1})\n\n      else\n        # This branch catches \"Cosmic Ray\" memory corruption or config mismatches\n        Logger.error(\"CRITICAL: Buffer Mismatch! Rust sent #{byte_size(raw_binary)}, Expected #{@expected_size}\")\n        {:error, :memory_corruption}\n      end\n    else\n      # The Rust NIF hasn't been loaded into the Persistent Term yet\n      {:error, :resource_not_ready}\n    end\n  end\nend\n",
       "skeleton": {
         "modules": [
           "SwarmBrain.Vision.SharedBuffer"
@@ -2042,7 +2175,7 @@
           "Server",
           "SwarmBrain.Vision"
         ],
-        "complexity": 5,
+        "complexity": 3,
         "doc": null
       }
     },

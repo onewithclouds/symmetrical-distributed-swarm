@@ -14,6 +14,9 @@ defmodule SwarmBrain.Vision.Native do
   # Arity 3: resource, width, height
   def start_camera(_resource, _width, _height), do: error()
 
+  # [NEW] The Watchdog Probe
+  def check_health(_resource), do: error()
+
   # --- 2. SENSORS (ATOMIC) ---
 
   def get_latest_frame(_resource), do: error()
@@ -23,15 +26,15 @@ defmodule SwarmBrain.Vision.Native do
   # --- 3. LOGIC (RETINA) ---
 
   # Arity 2: resource, frame_binary
-  def detect_change(_resource, _frame), do: error()
+  def detect_change(_resource), do: error()
 
   # --- 4. LEGACY STUBS (FIXED) ---
 
   # [FIX] Removed _env. Arity is now 4 (id, x, y, h).
-  def update_spatial_state(_id, _x, _y, _h), do: error()
+  def update_spatial_state(_resource, _x, _y, _status), do: error()
 
   # [FIX] Removed _env. Arity is now 1 (id).
-  def get_spatial_state(_id), do: error()
+  def get_spatial_state(_resource, _x, _y), do: error()
 
   # [FIX] Removed _env. Arity is now 0.
   def setup_queryable(), do: error()
